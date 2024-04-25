@@ -12,4 +12,4 @@
 
 `python sequentialFlow.py ./actions/readFile.py ./actions/textSummarizer.py https://www.dwsamplefiles.com/?dl_id=176`
 
-The above will summarize the text file at the url https://www.dwsamplefiles.com/?dl_id=176["https://www.dwsamplefiles.com/?dl_id=176"].
+The above will summarize the text file at the url https://www.dwsamplefiles.com/?dl_id=176.
