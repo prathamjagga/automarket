@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* for create app */
+
+body {
+  background: #1d1e21;
+  color: white;
+  font-family: "open sans";
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  display: flex;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.draggableArea {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 16px;
+  max-width: 240px;
+  margin: 0px 20px;
+  border: 2px solid white;
+  padding: 20px;
+}
+
+.droppableArea {
+  background: black;
+  border: 2px solid blue;
+  border-radius: 8px;
+  padding: 20px;
+  width: 215px;
+  margin: 20px auto;
+  position: relative;
+  transition: border-color 100ms linear;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.draggableEntity::before {
+  content: attr(id);
+}
+
+/* create app ends */
