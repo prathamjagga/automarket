@@ -4,17 +4,6 @@
 
 /* for create app */
 
-body {
-  background: #1d1e21;
-  color: white;
-  font-family: "open sans";
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 * {
   box-sizing: border-box;
 }

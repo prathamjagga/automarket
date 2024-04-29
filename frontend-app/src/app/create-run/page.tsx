@@ -3,6 +3,8 @@
 import { Sidebar } from "flowbite-react";
 import { HiChartPie, HiViewBoards } from "react-icons/hi";
 
+import WorkflowBuilder from "./WorkflowBuilder";
+
 export function Component() {
   return (
     <Sidebar aria-label="Default sidebar example">
@@ -12,12 +14,27 @@ export function Component() {
             App Builder 👷‍♂️
           </Sidebar.Item>
           <Sidebar.Item
-            href="#"
+            href="/run-apps"
             icon={HiViewBoards}
             // label="Pro"
             labelColor="dark"
           >
             Run Apps 🚀
+          </Sidebar.Item>
+        </Sidebar.ItemGroup>
+        <Sidebar.ItemGroup
+          style={{ position: "absolute", bottom: "10px", left: "20px" }}
+        >
+          <Sidebar.Item
+            href="#"
+            icon={HiViewBoards}
+            // label="Pro"
+            labelColor="dark"
+            onClick={() => {
+              alert("Flow saved as app");
+            }}
+          >
+            Save flow as App
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
@@ -86,14 +103,16 @@ function AppBuilder() {
 
 function CreateRun() {
   return (
-    <div className="flex flex-row">
-      <div>
-        <Component />
+    <div>
+      <div className="flex flex-row">
+        <div>
+          <Component />
+        </div>
+        <div>
+          {/* <AppBuilder /> */}
+          <WorkflowBuilder />
+        </div>
       </div>
-      <div>
-        <AppBuilder />
-      </div>
-      <div></div>
     </div>
   );
 }
