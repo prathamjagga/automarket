@@ -1,0 +1,89 @@
+## Following actions are need to be developed:
+
+- Campaigning: email marketing, marketing automation, crm tools etc.
+- DocSearch: Search , summarize and translate documents.
+- airtable integration
+- s3 storage
+- anthrophic
+- approval on run
+- asana integration
+- openai
+- ai image generation
+- user engagement with targeted announcements
+- box: secure content management and collaboration
+- calendly
+- clickup
+- clickodo
+- convertkit
+- discord
+- figma
+- formbricks
+- forms
+- frame
+- gcloud pub sub
+- ghostcms
+- github
+- gitlab
+- gmail
+- google calender
+- google contacts
+- google drive
+- google forms
+- google my business
+- google tasks
+- gravity forms
+- hubspot
+- imap
+- jira cloud
+- jotform
+- kizeo forms
+- lead connector
+- line bot
+- linear
+- mailchimp
+- mailerlite
+- mautic
+- excel 365
+- onedrive
+- monday.com
+- moxie
+- notion
+- onfleet
+- pastefy
+- pipedrive
+- quickzu
+- rss feed
+- salesforce
+- schdule workflows
+- sessions.us
+- sftp
+- shopify
+- simplepdf
+- slack
+- spotify
+- square
+- stripe
+- survey monkey
+- tally
+- telegram bot
+- tidycal
+- todoist
+- totalCMS
+- trello
+- twilio
+- typeform
+- vtiger
+- webflow
+- webhook
+- wedof
+- woocommerce
+- youtube
+- wordpress
+- zendesk
+- zoho crm
+- zoho invoice
+
+## Following actions are developed:
+
+- Read Text file from URL
+- Summarize text from text string
