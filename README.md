@@ -1,3 +1,5 @@
+![alt text](image.png)
+
 ## AutoMarket is the online platform to create microautomations, publish them and use them.
 
 ### So, how does it works?
