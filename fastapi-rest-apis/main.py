@@ -12,3 +12,6 @@ def run():
     # TO DO: extract actions from request here
     output = subprocess.check_output(["python", "../sequentialFlow.py", "../actions/readFile.py", "../actions/textSummarizer.py", "https://www.dwsamplefiles.com/?dl_id=176"])
     return output
+@app.get("/actions")
+def getActions():
+    return 1
