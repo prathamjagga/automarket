@@ -70,13 +70,7 @@ async function CrudShowcase() {
 
   return (
     <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
+      hi there, please navigate to /create-run
     </div>
   );
 }

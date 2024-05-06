@@ -62,27 +62,11 @@ const registerNodes: IRegisterNode[] = [
   },
   {
     type: "node",
-    name: "node display",
+    name: "Add Action in Sequence",
     displayComponent: NodeDisplay,
     configComponent: ConfigForm,
   },
-  {
-    type: "condition",
-    name: "condition node display",
-    displayComponent: ConditionNodeDisplay,
-    configComponent: ConfigForm,
-  },
-  {
-    type: "branch",
-    name: "condition",
-    conditionNodeType: "condition",
-  },
-  {
-    type: "loop",
-    name: "node display",
-    displayComponent: NodeDisplay,
-    isLoop: true,
-  },
+
 ];
 
 const defaultNodes = [
@@ -121,6 +105,7 @@ const NodeForm = () => {
         PopoverComponent={PopoverComponent}
         PopconfirmComponent={PopconfirmComponent}
       />
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Flow</button>
     </div>
   );
 };
