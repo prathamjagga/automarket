@@ -12,13 +12,13 @@ def run_python_file(file_path, arg):
         print("Error:", e.output)
         return None
     
-
-argsLength = len(sys.argv)
-input = sys.argv[argsLength-1]
-
-for i in range(1, len(sys.argv)-1):
-    output = run_python_file(sys.argv[i], input)
-    input = output
-
-print(output)
-
+def run_sequence(files, input):
+    try:
+        output = ""
+        for file in files:
+            output = run_python_file(f"../{file}", input)
+            input = output
+        return output
+    except Exception as e:
+        pass
+    pass
