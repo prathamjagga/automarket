@@ -1,19 +1,11 @@
 import requests
 import sys
+import json
 
-url = "https://textanalysis-text-summarization.p.rapidapi.com/text-summarizer"
-
-payload = {
-	"url": "http://en.wikipedia.org/wiki/Automatic_summarization",
-	"text": sys.argv[1],
-	"sentnum": 8
-}
-headers = {
-	"content-type": "application/json",
-	"X-RapidAPI-Key": "af74029910msh5b6e260ba57a618p19ab41jsn8be7af70ca5e",
-	"X-RapidAPI-Host": "textanalysis-text-summarization.p.rapidapi.com"
-}
-
-# response = requests.post(url, json=payload, headers=headers)
-
-print("this is automatically summarized text")
+try:
+	input_json = json.loads(sys.argv[1])
+	text = input_json["text"]
+	# TODO: use some api for summarization
+	print({"output":{"type":"text", "content":"This is the summarized text"}})
+except Exception as e:
+	print({"output":{"type":"error", "content":e}})

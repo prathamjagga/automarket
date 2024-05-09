@@ -1,11 +1,13 @@
-api_key = ""
-
-
 import requests
+import sys
+import json
 
-userURI = "https://api.calendly.com/users/5e59d9c7-6579-41c4-9b9f-b73a18a6a0e3"
-
-events = requests.get("https://api.calendly.com/scheduled_events?user="+userURI, headers={"Authorization": "Bearer " + api_key})
-
-
-print(events.json())
+try:
+    input_data = json.loads(sys.argv[1])
+    api_key = input_data["api_key"]
+    user_URI = input_data["user_URI"]
+    events = requests.get("https://api.calendly.com/scheduled_events?user="+user_URI, headers={"Authorization": "Bearer " + api_key})
+    print({ "output": {"type":"json", "content":events.json()}})
+          
+except Exception as e:
+    print({"output": {"type": "error", "content": e}})

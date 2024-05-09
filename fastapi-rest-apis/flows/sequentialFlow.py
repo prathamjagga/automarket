@@ -5,6 +5,7 @@ import subprocess
 
 # exit()
 def run_python_file(file_path, arg):
+    print("FILE PATH", file_path)
     try:
         output = subprocess.check_output(["python", file_path, arg], stderr=subprocess.STDOUT, universal_newlines=True)
         return output
@@ -13,12 +14,16 @@ def run_python_file(file_path, arg):
         return None
     
 def run_sequence(files, input):
+    print("FILES", files)
+    print("INPUT", input)
     try:
         output = ""
         for file in files:
-            output = run_python_file(f"../{file}", input)
+            output = run_python_file(f"../actions/{file}.py", input)
+            print("OP", output)
             input = output
         return output
     except Exception as e:
+        return e
         pass
     pass

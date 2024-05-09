@@ -1,18 +1,21 @@
 from db.index import runSQL
 
-def addAction(name, input, output):
+def addAction(name, inputs):
     try:
-        result = runSQL(f"INSERT INTO \"actions_content\" (\"name\", \"input_type\", \"output_type\") VALUES ('{name}', '{input}', '{output}')")
-        return result
+        runSQL(f"INSERT INTO \"actions_content\" (\"name\") VALUES ('{name}')")
+        for val in inputs:
+            runSQL(f"INSERT INTO \"action_inputs\" (\"action\", \"input_name\", \"input_type\") VALUES ('{name}', '{val['input_name']}', '{val['input_type']}')")
+        return "Success"
     except Exception as e:
-        print("ERROR", Exception)
+        print("ERROR", e)
 
 def getAllActions():
     try:
-        result = runSQL("SELECT * from \"actions_content\"")
+        result = runSQL(f"select distinct * from action_inputs INNER join actions_content on actions_content.name = action_inputs.action")
         result = result.fetchall()
         print("RESULT", result)
         return result
     except Exception as e:
         print("ERROR while getting actions", e);
         return False
+    

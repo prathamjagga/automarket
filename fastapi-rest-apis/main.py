@@ -1,6 +1,11 @@
 import subprocess
-from fastapi import FastAPI
 import json
+
+
+from fastapi import FastAPI, Body
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+
 
 import db.index as DB
 from db.index import session
@@ -10,6 +15,16 @@ from flows.index import addFlowToDB, runFlow
 from models import ActionsContent, FlowsContent, RunFlowInput
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
@@ -24,11 +39,9 @@ def run():
 @app.get("/actions")
 def getActions():
     result = getAllActions()
-    json_result = {}
-    idx = 0
+    json_result = []
     for val in result:
-        json_result[idx] = {"name":val[0], "input_type":val[1], "output_type": val[2]}
-        idx = idx+1
+        json_result.append({"name":val[0], "input_type":val[1], "output_type": val[2]})
     return json_result
 
 @app.get("/db-status")
@@ -36,13 +49,20 @@ def dbStatus():
     return DB.getDBStatus()
 
 @app.post("/add-action")
-def addAnAction(actions_content: ActionsContent):
-    return addAction(actions_content.name, actions_content.input_type, actions_content.output_type)
+async def addAnAction(request: Request):
+    request = await request.json()
+    return addAction(request['name'], request['inputs'])
 
 @app.post("/add-flow")
-def addFlow(flows_content: FlowsContent):
-    return addFlowToDB(flows_content.nodes)
+async def addFlow(request: Request):
+    request = await request.json()
+    flows_content = request
+
+    return addFlowToDB(flows_content['nodes'])
 
 @app.post("/run-flow")
-def run_flow(flow_input: RunFlowInput):
-    return runFlow(flow_input.nodes, flow_input.input)
+async def run_flow(request: Request):
+    request = await request.json()
+    flow_input = request
+    print("FLOWS CONTENT", flow_input)
+    return {"output": runFlow(flow_input['nodes'], flow_input['input'])}

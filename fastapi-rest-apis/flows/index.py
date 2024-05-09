@@ -1,7 +1,7 @@
 from db.index import runSQL
 from flows.sequentialFlow import run_sequence
 
-def runFlow(nodes: list, input):
+def runFlow(nodes, input):
     try:
         return run_sequence(nodes, input)
     except Exception as e:

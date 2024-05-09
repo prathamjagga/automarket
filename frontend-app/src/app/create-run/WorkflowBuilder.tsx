@@ -11,6 +11,8 @@ import { DrawerComponent, PopconfirmComponent, PopoverComponent } from "./antd";
 
 import "./index.css";
 
+import OutputModal from "../_components/output-component";
+
 const StartNodeDisplay: React.FC = () => {
   const node = useContext(NodeContext);
   return <div className="start-node">{node.name}</div>;
@@ -66,7 +68,6 @@ const registerNodes: IRegisterNode[] = [
     displayComponent: NodeDisplay,
     configComponent: ConfigForm,
   },
-
 ];
 
 const defaultNodes = [
@@ -87,14 +88,55 @@ const defaultNodes = [
 
 const NodeForm = () => {
   const [nodes, setNodes] = useState<INode[]>(defaultNodes);
+  const [show, setShow] = useState(false);
+  const [outputText, setOutputText] = useState("");
 
   const handleChange = (nodes: INode[]) => {
     console.log("nodes change", nodes);
     setNodes(nodes);
   };
+  function saveFlow() {
+    let nodeArray = [];
+    let nodeInputs = [];
+    if (nodes.length <= 2) alert("Can't save - invalid workflow");
+    for (let val of nodes) {
+      if (val.data != null) {
+        nodeArray.push(val.data.name);
+        nodeInputs.push(val.data.input);
+      }
+    }
 
+    let firstInput = nodeInputs[0];
+
+    let body = { nodes: nodeArray };
+    fetch("http://localhost:8000/add-flow", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("DONE", res);
+      });
+
+    fetch("http://localhost:8000/run-flow", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ nodes: nodeArray, input: firstInput }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOutputText(res.output);
+        setShow(true);
+      });
+  }
   return (
     <div className="w-[80vw]">
+      <OutputModal show={show} setShow={setShow} text={outputText} />
       <FlowBuilder
         nodes={nodes}
         onChange={handleChange}
@@ -105,7 +147,18 @@ const NodeForm = () => {
         PopoverComponent={PopoverComponent}
         PopconfirmComponent={PopconfirmComponent}
       />
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Flow</button>
+      <button
+        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        onClick={() => saveFlow()}
+      >
+        Save Flow
+      </button>
+      <button
+        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        onClick={() => saveFlow()}
+      >
+        Run Flow
+      </button>
     </div>
   );
 };

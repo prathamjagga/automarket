@@ -1,11 +1,11 @@
 import sys
 import urllib.request
+import json
 
 def read_file_from_url(url):
     try:
         # Add a user-agent header to the request
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        
         # Open the URL and read the contents
         with urllib.request.urlopen(req) as response:
             data = response.read().decode('utf-8')
@@ -14,15 +14,13 @@ def read_file_from_url(url):
         print("Error:", e)
         return None
 
-if __name__ == "__main__":
+try:
     # Check if URL is provided as command-line argument
-    if len(sys.argv) != 2:
-        print("Usage: python program.py <file_url>")
-        sys.exit(1)
-
-    file_url = sys.argv[1]
+    input_json = json.loads(sys.argv[1])
+    file_url = input_json["url"]
     file_contents = read_file_from_url(file_url)
-
     if file_contents:
-        print("Contents of the file from URL:", file_url)
-        print(file_contents)
+        print({"output": {"type": "text", "content": file_contents}})
+except:
+    print({"output": {"type": "error", "content": "Error reading file."}})
+    pass

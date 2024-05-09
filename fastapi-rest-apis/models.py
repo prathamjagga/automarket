@@ -6,7 +6,7 @@ class ActionsContent(BaseModel):
     output_type: str
 
 class FlowsContent(BaseModel):
-    nodes: list
+    nodes: str
 
 class RunFlowInput(BaseModel):
     nodes: list
