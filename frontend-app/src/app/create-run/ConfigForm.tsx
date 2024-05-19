@@ -1,26 +1,41 @@
 "use client";
 
+import { list } from "postcss";
 import React, { useContext, useEffect, useState } from "react";
 import { BuilderContext, useDrawer } from "react-flow-builder";
-import { Form, Button, Input } from "antd";
 
 const ConfigForm: React.FC = () => {
   useEffect(() => {
     fetch("http://localhost:8000/actions")
       .then((res) => res.json())
       .then((res) => {
-        setActionItems(res);
+        // setActionItems(res);
+        setActionItems(["textSummarizer", "readFile"]);
+        setFieldValues(res);
       });
   }, []);
-  const { selectedNode: node } = useContext(BuilderContext);
 
+  async function handleSelectionChange(e: any) {
+    setName(e.target.value);
+    setFields(null);
+    setFieldValues(null);
+    let inputs = await fetch("http://localhost:8000/action/" + e.target.value);
+    inputs.json().then((res) => {
+      setFields(res.inputs);
+      setFieldValues({});
+    });
+  }
+
+  const { selectedNode: node } = useContext(BuilderContext);
   const { closeDrawer: cancel, saveDrawer: save } = useDrawer();
   const [name, setName] = useState<string | null>("select an action");
   const [actionItems, setActionItems] = useState<any[]>([]);
   const [actionInput, setActionInput] = useState<string>("");
+  const [fields, setFields] = useState<any[] | null>(null);
+  const [fieldValues, setFieldValues] = useState<any | null>(null);
 
   const handleSubmit = async (data: any) => {
-    save({ name: data, input: actionInput });
+    save({ name: data, input: fieldValues });
     cancel();
   };
 
@@ -28,19 +43,43 @@ const ConfigForm: React.FC = () => {
     <div>
       <select
         value={name == null ? "select an action" : name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={handleSelectionChange}
       >
         {actionItems.map((item) => {
-          return <option value={item.name}>{item.name}</option>;
+          return <option value={item}>{item}</option>;
         })}
       </select>
-
-      <input
-        type="text"
-        value={actionInput}
-        onChange={(e) => setActionInput(e.target.value)}
-        placeholder="enter action input"
-      />
+      {fields &&
+        fields.map((field, index) => (
+          <>
+            {field.type === "text" && (
+              <input
+                type="text"
+                placeholder={field.name}
+                value={fieldValues[field.name]}
+                onChange={(e) =>
+                  setFieldValues({
+                    ...fieldValues,
+                    [field.name]: e.target.value,
+                  })
+                }
+              />
+            )}
+            {field.type === "url" && (
+              <input
+                type="url"
+                placeholder={field.name}
+                value={fieldValues[field.name]}
+                onChange={(e) =>
+                  setFieldValues({
+                    ...fieldValues,
+                    [field.name]: e.target.value,
+                  })
+                }
+              />
+            )}
+          </>
+        ))}
       <div>
         <button className="m-2 rounded border-solid	 border-zinc-400 bg-zinc-500 px-4 py-2 font-bold text-white hover:bg-yellow-700">
           Cancel

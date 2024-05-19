@@ -9,7 +9,7 @@ from starlette.requests import Request
 
 import db.index as DB
 from db.index import session
-from actions.index import addAction, getAllActions
+from actions.index import addAction, getAllActions, getAction
 from flows.index import addFlowToDB, runFlow
 
 from models import ActionsContent, FlowsContent, RunFlowInput
@@ -36,13 +36,24 @@ def run():
     output = subprocess.check_output(["python", "../sequentialFlow.py", "../actions/readFile.py", "../actions/textSummarizer.py", "https://www.dwsamplefiles.com/?dl_id=176"])
     return output
 
+@app.get("/action/{name}")
+def getActionAPI(name):
+    result = getAction(name)
+    json_result = []
+    for val in result:
+        json_result.append({"name":val[1], "type":val[2]})
+    return {"inputs":json_result}
+    print(result)
+    return None
+
 @app.get("/actions")
 def getActions():
     result = getAllActions()
-    json_result = []
-    for val in result:
-        json_result.append({"name":val[0], "input_type":val[1], "output_type": val[2]})
-    return json_result
+    # json_result = []
+    # for val in result:
+    #     json_result.append({"name":val[0]})
+    # return json_result
+    return result
 
 @app.get("/db-status")
 def dbStatus():
@@ -63,6 +74,7 @@ async def addFlow(request: Request):
 @app.post("/run-flow")
 async def run_flow(request: Request):
     request = await request.json()
+    print("REQ", request)
     flow_input = request
-    print("FLOWS CONTENT", flow_input)
-    return {"output": runFlow(flow_input['nodes'], flow_input['input'])}
+    OP =  runFlow(flow_input['nodes'], flow_input['input'])
+    return json.loads(OP)

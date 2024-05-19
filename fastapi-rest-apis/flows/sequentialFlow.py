@@ -2,6 +2,7 @@
 
 import sys
 import subprocess
+import json
 
 # exit()
 def run_python_file(file_path, arg):
@@ -19,9 +20,10 @@ def run_sequence(files, input):
     try:
         output = ""
         for file in files:
-            output = run_python_file(f"../actions/{file}.py", input)
+            output = run_python_file(f"../actions/{file}.py", json.dumps(input))
             print("OP", output)
             input = output
+        print("OP in runSequence", output)
         return output
     except Exception as e:
         return e

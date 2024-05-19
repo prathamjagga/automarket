@@ -16,6 +16,13 @@ def getAllActions():
         print("RESULT", result)
         return result
     except Exception as e:
-        print("ERROR while getting actions", e);
+        print("ERROR while getting actions", e)
         return False
-    
+
+def getAction(name):
+    try:
+        result = runSQL(f"select distinct * from action_inputs INNER join actions_content on actions_content.name = action_inputs.action where actions_content.name = '{name}'")
+        result = result.fetchall()
+        return result
+    except:
+        pass

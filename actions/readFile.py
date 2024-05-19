@@ -11,8 +11,7 @@ def read_file_from_url(url):
             data = response.read().decode('utf-8')
             return data
     except Exception as e:
-        print("Error:", e)
-        return None
+        return e
 
 try:
     # Check if URL is provided as command-line argument
@@ -20,7 +19,7 @@ try:
     file_url = input_json["url"]
     file_contents = read_file_from_url(file_url)
     if file_contents:
-        print({"output": {"type": "text", "content": file_contents}})
+        print(json.dumps({"output": {"type": "json", "content": {"text": file_contents}}}))
 except:
-    print({"output": {"type": "error", "content": "Error reading file."}})
+    print(json.dumps({"output": {"type": "error", "content": "Error reading file."}}))
     pass

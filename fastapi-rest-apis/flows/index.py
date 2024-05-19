@@ -3,7 +3,8 @@ from flows.sequentialFlow import run_sequence
 
 def runFlow(nodes, input):
     try:
-        return run_sequence(nodes, input)
+        OP = run_sequence(nodes, input)
+        return OP
     except Exception as e:
         print("ERROR", e)
         return False

@@ -101,6 +101,7 @@ const NodeForm = () => {
     if (nodes.length <= 2) alert("Can't save - invalid workflow");
     for (let val of nodes) {
       if (val.data != null) {
+        console.log(val.data);
         nodeArray.push(val.data.name);
         nodeInputs.push(val.data.input);
       }
@@ -108,8 +109,20 @@ const NodeForm = () => {
 
     let firstInput = nodeInputs[0];
 
-    let body = { nodes: nodeArray };
-    fetch("http://localhost:8000/add-flow", {
+    let body = { nodes: nodeArray, input: firstInput };
+    // fetch("http://localhost:8000/add-flow", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(body),
+    // })
+    // .then((res) => res.json())
+    // .then((res) => {
+    //   console.log("DONE", res);
+    // });
+
+    fetch("http://localhost:8000/run-flow", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -118,19 +131,7 @@ const NodeForm = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("DONE", res);
-      });
-
-    fetch("http://localhost:8000/run-flow", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ nodes: nodeArray, input: firstInput }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setOutputText(res.output);
+        setOutputText(res.output.content);
         setShow(true);
       });
   }
