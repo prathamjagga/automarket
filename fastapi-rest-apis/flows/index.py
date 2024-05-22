@@ -2,6 +2,8 @@ from db.index import runSQL
 from flows.sequentialFlow import run_sequence
 
 def runFlow(nodes, input):
+    print(input)
+    # exit()
     try:
         OP = run_sequence(nodes, input)
         return OP

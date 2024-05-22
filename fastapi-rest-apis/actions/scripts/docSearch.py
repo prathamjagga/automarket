@@ -10,6 +10,6 @@ try:
     text = input_json["text"]
     keyword = input_json["keyword"]
     num_occurrences = find_occurrences(text, keyword)
-    print({"output": {"type": "text", "content": f"The keyword '{keyword}' occurs {num_occurrences} times in the text."}})
+    print(json.dumps({"output": {"type": "text", "content": f"The keyword '{keyword}' occurs {num_occurrences} times in the text."}}))
 except Exception as e:
-    print({"output": {"type": "error", "content": e}})
+    print(json.dumps({"output": {"type": "error", "content": e}}))

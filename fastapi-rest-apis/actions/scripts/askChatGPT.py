@@ -13,7 +13,7 @@ try:
         {"role": "user", "content": json_args['prompt']}
       ]
     )
-    print({"output": {"type":"text", "content":completion.choices[0].message.content}})
+    print(json.dumps({"output": {"type":"text", "content":completion.choices[0].message.content}}))
 except Exception as e:
-    print({"output": {"type": "error", "content": e}})
+    print(json.dumps({"output": {"type": "error", "content": e}}))
 

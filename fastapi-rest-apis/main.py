@@ -2,6 +2,7 @@ import subprocess
 import json
 
 
+import uvicorn
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.requests import Request
@@ -9,7 +10,7 @@ from starlette.requests import Request
 
 import db.index as DB
 from db.index import session
-from actions.index import addAction, getAllActions, getAction
+from actions.index import addAction, getAllActions, getAction, getActionOutputs
 from flows.index import addFlowToDB, runFlow
 
 from models import ActionsContent, FlowsContent, RunFlowInput
@@ -45,7 +46,14 @@ def getActionAPI(name):
     return {"inputs":json_result}
     print(result)
     return None
-
+@app.get("/outputs/{action_name}")
+def getActionOutputAPI(action_name):
+    print("ACTION_NAME", action_name)
+    result = getActionOutputs(action_name)
+    json_result = []
+    for val in result:
+        json_result.append({"name":val[1], "type":val[2]})
+    return {"outputs":json_result}
 @app.get("/actions")
 def getActions():
     result = getAllActions()
@@ -53,7 +61,14 @@ def getActions():
     # for val in result:
     #     json_result.append({"name":val[0]})
     # return json_result
-    return result
+    print(result)
+    # exit()
+    json_res = []
+    # i = 0
+    for val in result:
+        json_res.append({"action_name":val[0], "input_name": val[1], "input_type":val[2]})
+        # i = i+1
+    return json_res
 
 @app.get("/db-status")
 def dbStatus():
@@ -77,4 +92,9 @@ async def run_flow(request: Request):
     print("REQ", request)
     flow_input = request
     OP =  runFlow(flow_input['nodes'], flow_input['input'])
+    # print("OP", OP)
     return json.loads(OP)
+
+
+# if __name__ == "main":
+#     uvicorn.run(app, host="127.0.0.1", port=8000)

@@ -26,3 +26,11 @@ def getAction(name):
         return result
     except:
         pass
+
+def getActionOutputs(name):
+    try:
+        result = runSQL(f"select distinct * from action_outputs INNER join actions_content on actions_content.name = action_outputs.action where actions_content.name = '{name}'")
+        result = result.fetchall()
+        return result
+    except:
+        pass

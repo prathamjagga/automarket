@@ -12,6 +12,8 @@ import { DrawerComponent, PopconfirmComponent, PopoverComponent } from "./antd";
 import "./index.css";
 
 import OutputModal from "../_components/output-component";
+import ConfigFormWrapped from "./ConfigFormWrapped";
+import WorkflowContext from "./WorkflowContext";
 
 const StartNodeDisplay: React.FC = () => {
   const node = useContext(NodeContext);
@@ -49,27 +51,6 @@ const ConditionNodeDisplay: React.FC = () => {
   );
 };
 
-const registerNodes: IRegisterNode[] = [
-  {
-    type: "start",
-    name: "start node display",
-    displayComponent: StartNodeDisplay,
-    isStart: true,
-  },
-  {
-    type: "end",
-    name: "end node display",
-    displayComponent: EndNodeDisplay,
-    isEnd: true,
-  },
-  {
-    type: "node",
-    name: "Add Action in Sequence",
-    displayComponent: NodeDisplay,
-    configComponent: ConfigForm,
-  },
-];
-
 const defaultNodes = [
   {
     id: "node-0d9d4733-e48c-41fd-a41f-d93cc4718d97",
@@ -89,7 +70,28 @@ const defaultNodes = [
 const NodeForm = () => {
   const [nodes, setNodes] = useState<INode[]>(defaultNodes);
   const [show, setShow] = useState(false);
+  const [nodeNumber, setNodeNumber] = useState(0);
   const [outputText, setOutputText] = useState("");
+  const registerNodes: IRegisterNode[] = [
+    {
+      type: "start",
+      name: "start node display",
+      displayComponent: StartNodeDisplay,
+      isStart: true,
+    },
+    {
+      type: "end",
+      name: "end node display",
+      displayComponent: EndNodeDisplay,
+      isEnd: true,
+    },
+    {
+      type: "node",
+      name: "Add Action in Sequence",
+      displayComponent: NodeDisplay,
+      configComponent: ConfigForm,
+    },
+  ];
 
   const handleChange = (nodes: INode[]) => {
     console.log("nodes change", nodes);
@@ -109,7 +111,7 @@ const NodeForm = () => {
 
     let firstInput = nodeInputs[0];
 
-    let body = { nodes: nodeArray, input: firstInput };
+    let body = { nodes: nodeArray, input: nodeInputs };
     // fetch("http://localhost:8000/add-flow", {
     //   method: "POST",
     //   headers: {
@@ -131,36 +133,39 @@ const NodeForm = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setOutputText(res.output.content);
+        if (res.output.type == "json") setOutputText(res.output.content.text);
+        else setOutputText(res.output.content);
         setShow(true);
       });
   }
   return (
-    <div className="w-[80vw]">
-      <OutputModal show={show} setShow={setShow} text={outputText} />
-      <FlowBuilder
-        nodes={nodes}
-        onChange={handleChange}
-        registerNodes={registerNodes}
-        historyTool
-        zoomTool
-        DrawerComponent={DrawerComponent}
-        PopoverComponent={PopoverComponent}
-        PopconfirmComponent={PopconfirmComponent}
-      />
-      <button
+    <WorkflowContext.Provider value={{ nodes, setNodes }}>
+      <div className="flex h-[100vh] w-[82vw] flex-col">
+        <OutputModal show={show} setShow={setShow} text={outputText} />
+        <FlowBuilder
+          nodes={nodes}
+          onChange={handleChange}
+          registerNodes={registerNodes}
+          historyTool
+          zoomTool
+          DrawerComponent={DrawerComponent}
+          PopoverComponent={PopoverComponent}
+          PopconfirmComponent={PopconfirmComponent}
+        />
+        {/* <button
         className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         onClick={() => saveFlow()}
       >
         Save Flow
-      </button>
-      <button
-        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={() => saveFlow()}
-      >
-        Run Flow
-      </button>
-    </div>
+      </button> */}
+        <button
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => saveFlow()}
+        >
+          Run Flow
+        </button>
+      </div>
+    </WorkflowContext.Provider>
   );
 };
 

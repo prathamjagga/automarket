@@ -3,8 +3,20 @@
 import { list } from "postcss";
 import React, { useContext, useEffect, useState } from "react";
 import { BuilderContext, useDrawer } from "react-flow-builder";
+import WorkflowContext from "./WorkflowContext";
 
 const ConfigForm: React.FC = () => {
+  // const { nodes, setNodes } = useContext(WorkflowContext);
+  let workflowContext: any = useContext(WorkflowContext);
+  let [prevNodeOutputs, setPrevNodeOutputs] = useState([]);
+  let [prevNodeIdx, setPrevNodeIdx] = useState<number>(0);
+  let nodes = workflowContext.nodes;
+  let setNodes = workflowContext.setNodes;
+  const { selectedNode }: any = useContext(BuilderContext);
+  console.log("SELECTED NODE", selectedNode);
+
+  // console.log("NODES", nodes);/
+  // console.log("NODES", nodes)
   useEffect(() => {
     fetch("http://localhost:8000/actions")
       .then((res) => res.json())
@@ -14,6 +26,36 @@ const ConfigForm: React.FC = () => {
         setFieldValues(res);
       });
   }, []);
+
+  useEffect(() => {
+    // fetch("http://localhost:8000/output/");
+    console.log("moved here");
+    if (nodes.length > 3) {
+      let idx = 0;
+      for (let node of nodes) {
+        if (node.id == selectedNode.id) {
+          setPrevNodeIdx(idx - 1);
+          break;
+        }
+        idx = idx + 1;
+      }
+
+      idx = idx - 1;
+      console.log("PREV NODE IDX", idx);
+      if (
+        !(idx < 0) &&
+        nodes[idx].data != null &&
+        nodes[idx].data.name != "select an action"
+      ) {
+        fetch("http://localhost:8000/outputs/" + nodes[idx].data.name)
+          .then((res) => res.json())
+          .then((res) => {
+            setPrevNodeOutputs(res.outputs);
+            console.log(prevNodeOutputs);
+          });
+      }
+    }
+  }, [selectedNode]);
 
   async function handleSelectionChange(e: any) {
     setName(e.target.value);
@@ -26,11 +68,11 @@ const ConfigForm: React.FC = () => {
     });
   }
 
-  const { selectedNode: node } = useContext(BuilderContext);
   const { closeDrawer: cancel, saveDrawer: save } = useDrawer();
   const [name, setName] = useState<string | null>("select an action");
   const [actionItems, setActionItems] = useState<any[]>([]);
   const [actionInput, setActionInput] = useState<string>("");
+
   const [fields, setFields] = useState<any[] | null>(null);
   const [fieldValues, setFieldValues] = useState<any | null>(null);
 
@@ -45,6 +87,7 @@ const ConfigForm: React.FC = () => {
         value={name == null ? "select an action" : name}
         onChange={handleSelectionChange}
       >
+        <option>Select an action</option>
         {actionItems.map((item) => {
           return <option value={item}>{item}</option>;
         })}
