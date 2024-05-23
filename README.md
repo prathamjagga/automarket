@@ -1,7 +1,7 @@
 ![alt text](image.png)
 
 ## Project Description 📄
-#### AutoMarket is the online platform . It is used for creating , publishing , and utilizing microautomations. These micro-apps/micro-automations are simple scripts arranged in flow that automate repetitive tasks by taking an input, processing it, and providing an output.
+AutoMarket is the online platform . It is used for creating , publishing , and utilizing microautomations. These micro-apps/micro-automations are simple scripts arranged in flow that automate repetitive tasks by taking an input, processing it, and providing an output.
 
 ## Why It Matters? 🤔
 In today's fast-paced digital world, efficiency is paramount. AutoMarket addresses the need for streamlined automation solutions, empowering users to focus on high-value tasks while minimizing manual effort.
@@ -57,7 +57,7 @@ Local:        http://localhost:3000
 
 ### 🆕 Features
 
-#### Prebuilt Actions
+#### 🌟 Prebuilt Actions
 readFile.py: Reads content from a file or URL.
 textSummarizer.py: Summarizes text content.
 
