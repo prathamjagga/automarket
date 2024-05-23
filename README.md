@@ -76,7 +76,7 @@ python sequentialFlow.py ./actions/readFile.py ./actions/textSummarizer.py https
 We welcome contributions! Please check out our Contributing Guidelines and Code of Conduct.
 
 ## 📝 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the GNU License. See the LICENSE file for details.
  
 <h2 align = "center">Our Contributors ❤️</h2>
 <div align = "center">
