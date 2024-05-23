@@ -1,16 +1,29 @@
 from db.index import runSQL
 from flows.sequentialFlow import run_sequence
 
-def runFlow(nodes, input):
+import json
+
+def runFlow(nodes, inputs):
     print(input)
     # exit()
     try:
-        OP = run_sequence(nodes, input)
+        OP = run_sequence(nodes, inputs)
         return OP
     except Exception as e:
         print("ERROR", e)
         return False
     return True
+
+def saveFlowStr(nodes, inputs):
+    try:
+        flow = {"nodes": nodes, "inputs": inputs}
+        flowstr = json.dumps(flow)
+        runSQL(f"INSERT INTO flow_as_str (flow_string) VALUES ('{flowstr}')")
+    except Exception as e:
+        print("ERROR", e)
+        return False
+    return True
+
 def addFlowToDB(nodes):
     nodesAsStr = ""
     for val in nodes:
@@ -22,3 +35,16 @@ def addFlowToDB(nodes):
         print("ERROR", e)
         return False
     
+
+
+def getStrFlows():
+    result = ""
+    result_json = []
+    try:
+        result = runSQL("select * from flow_as_str")
+        result = result.fetchall()
+        for val in result:
+            result_json.append(val[0])
+    except:
+        return False
+    return result_json

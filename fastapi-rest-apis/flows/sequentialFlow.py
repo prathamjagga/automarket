@@ -18,24 +18,25 @@ def run_python_file(file_path, arg):
         print("Error:", e)
         return None
     
-def run_sequence(files, input):
+def run_sequence(files, inputs):
     print("FILES", files)
-    print("INPUT", input)
+    print("INPUT", inputs)
     try:
         output = ""
         idx = 0
         for file in files:
-            print(type(output))
-            if("<prev>" in json.dumps(input[idx])):
-                output = json.loads(output)
-                # input[idx] = json.loads(input[idx])
-                input[idx]['text'] = output['output']['content']['text']
-            # input[idx] = json.dumps(input[idx])
-            print(input[idx])
-            print(f"input value {idx}", type(input[idx])) 
-            output = run_python_file(f"./actions/scripts/{file}.py", input[idx])
+            if idx != 0:
+                print(f"INPUT {idx}", inputs[idx])
+                keys = inputs[idx].keys()
+                values = inputs[idx].values()
+                for key, val in zip(keys, values):
+                    if "<prev" in val:
+                        # print(type(json.loads(output)))
+                        output = dict(json.loads(output))
+                        inputs[idx][key] = output['output']['content'][str(val[6:(len(val)-1)])]
+                # pass
+            output = run_python_file(f"./actions/scripts/{file}.py", inputs[idx])
             print(f"OP {idx}", output)
-            # input = output
             idx = idx + 1
         print("OP in runSequence", output)
         return output

@@ -11,7 +11,7 @@ from starlette.requests import Request
 import db.index as DB
 from db.index import session
 from actions.index import addAction, getAllActions, getAction, getActionOutputs
-from flows.index import addFlowToDB, runFlow
+from flows.index import addFlowToDB, runFlow, saveFlowStr, getStrFlows
 
 from models import ActionsContent, FlowsContent, RunFlowInput
 
@@ -95,6 +95,18 @@ async def run_flow(request: Request):
     # print("OP", OP)
     return json.loads(OP)
 
+@app.post("/save-flow")
+async def saveFlowAPI(request: Request):
+    try:
+        request = await request.json()
+        return saveFlowStr(request['nodes'], request['input'])
+    except:
+        return False
 
 # if __name__ == "main":
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+@app.get("/apps")
+async def getAllFlowsAPI():
+    return getStrFlows()
