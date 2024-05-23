@@ -8,8 +8,8 @@ In today's fast-paced digital world, efficiency is paramount. AutoMarket address
 
 
 ## Requirements 🔑
-### So, how does it works, you can try it out using the steps below:
-#### Before you begin, ensure that your system meets the following requirements:
+So, how does it works, you can try it out using the steps below:
+Before you begin, ensure that your system meets the following requirements:
 - `Python >=3.10`
 - `Postgres instance running on port 5832`
 - `NodeJS >=20.10.0 (Only required for frontend.)` 
@@ -67,18 +67,15 @@ Easily create custom actions by adding Python scripts in the actions folder.
 #### 🌟 Web Interface
 Utilize the web interface (requires NodeJS) to manage and trigger automations from a user-friendly interface.
 
-#### 🌟 Sequential Execution
-Chain multiple actions together and execute them in sequence with a single command.
-
 #### 🌟 Error Handling
 Robust error handling to ensure smooth execution of your automation workflows.
 
 python sequentialFlow.py ./actions/readFile.py ./actions/textSummarizer.py https://www.dwsamplefiles.com/?dl_id=176
 
-### 🤝 Contributing
+## 🤝 Contributing
 We welcome contributions! Please check out our Contributing Guidelines and Code of Conduct.
 
-### 📝 License
+## 📝 License
 This project is licensed under the MIT License. See the LICENSE file for details.
  
 <h2 align = "center">Our Contributors ❤️</h2>
