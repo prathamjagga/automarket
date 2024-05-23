@@ -51,25 +51,23 @@ git clone https://github.com/knight1001d/automarket.git
 Install dependencies by running the following command from the root of the project:
 
 ```bash
-cd automarket
+cd fastapi-rest-apis
+python -m venv venv
+./venv/Scripts/activate
 pip install -r requirements.txt
-```
-
-### 3. Run the following command from the root of the project to execute the sequential flow:
-To start the development server, run the following command:
-
-```bash
-python sequentialFlow.py <list of action files separated by space> <input>
-```
-Example:
-```bash
-python sequentialFlow.py ./actions/readFile.py ./actions/textSummarizer.py https://www.dwsamplefiles.com/?dl_id=176
-```
-
-### 4. View Your Project
-```bash
-cd frontend
+cd ../frontend-app
 npm i
+```
+
+### 3. Run the following command:
+To start the development server, run the following command:
+```bash
+cd ../fastapi-rest-apis
+fastapi dev main.py
+```
+
+### 4. View Your Project (run this command from frontend-app folder)
+```bash
 npm start
 ```
 
