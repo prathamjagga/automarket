@@ -112,7 +112,7 @@ const NodeForm = () => {
     let firstInput = nodeInputs[0];
 
     let body = { nodes: nodeArray, input: nodeInputs };
-    // fetch("http://localhost:8000/add-flow", {
+    // fetch("https://automarket.onrender.com/add-flow", {
     //   method: "POST",
     //   headers: {
     //     "Content-type": "application/json",
@@ -124,7 +124,7 @@ const NodeForm = () => {
     //   console.log("DONE", res);
     // });
 
-    fetch("http://localhost:8000/run-flow", {
+    fetch("https://automarket.onrender.com/run-flow", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

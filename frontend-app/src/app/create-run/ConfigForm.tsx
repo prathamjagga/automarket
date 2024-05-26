@@ -18,7 +18,7 @@ const ConfigForm: React.FC = () => {
   // console.log("NODES", nodes);/
   // console.log("NODES", nodes)
   useEffect(() => {
-    fetch("http://localhost:8000/actions")
+    fetch("https://automarket.onrender.com/actions")
       .then((res) => res.json())
       .then((res) => {
         // setActionItems(res);
@@ -28,7 +28,7 @@ const ConfigForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // fetch("http://localhost:8000/output/");
+    // fetch("https://automarket.onrender.com/output/");
     console.log("moved here");
     if (nodes.length > 3) {
       let idx = 0;
@@ -47,7 +47,7 @@ const ConfigForm: React.FC = () => {
         nodes[idx].data != null &&
         nodes[idx].data.name != "select an action"
       ) {
-        fetch("http://localhost:8000/outputs/" + nodes[idx].data.name)
+        fetch("https://automarket.onrender.com/outputs/" + nodes[idx].data.name)
           .then((res) => res.json())
           .then((res) => {
             setPrevNodeOutputs(res.outputs);
@@ -61,7 +61,9 @@ const ConfigForm: React.FC = () => {
     setName(e.target.value);
     setFields(null);
     setFieldValues(null);
-    let inputs = await fetch("http://localhost:8000/action/" + e.target.value);
+    let inputs = await fetch(
+      "https://automarket.onrender.com/action/" + e.target.value,
+    );
     inputs.json().then((res) => {
       setFields(res.inputs);
       setFieldValues({});

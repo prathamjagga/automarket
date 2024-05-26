@@ -11,7 +11,7 @@ export default function ConfigFormWrapped(
   const ConfigForm: React.FC = () => {
     console.log("NODES", nodes);
     useEffect(() => {
-      fetch("http://localhost:8000/actions")
+      fetch("https://automarket.onrender.com/actions")
         .then((res) => res.json())
         .then((res) => {
           // setActionItems(res);
@@ -25,7 +25,7 @@ export default function ConfigFormWrapped(
       setFields(null);
       setFieldValues(null);
       let inputs = await fetch(
-        "http://localhost:8000/action/" + e.target.value,
+        "https://automarket.onrender.com/action/" + e.target.value,
       );
       inputs.json().then((res) => {
         setFields(res.inputs);
