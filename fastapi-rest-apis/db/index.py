@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-DB_URL = "postgresql://postgres:mysecretpassword@localhost:5432/automarket"
+DB_URL = ""
 
 def createDBSession():
     engine = create_engine(DB_URL)

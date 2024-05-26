@@ -14,11 +14,11 @@ def runFlow(nodes, inputs):
         return False
     return True
 
-def saveFlowStr(nodes, inputs):
+def saveFlowStr(nodes, inputs, name):
     try:
         flow = {"nodes": nodes, "inputs": inputs}
         flowstr = json.dumps(flow)
-        runSQL(f"INSERT INTO flow_as_str (flow_string) VALUES ('{flowstr}')")
+        runSQL(f"INSERT INTO flow_as_str (flow_string, app_name) VALUES ('{flowstr}', '{name}')")
     except Exception as e:
         print("ERROR", e)
         return False
@@ -44,7 +44,8 @@ def getStrFlows():
         result = runSQL("select * from flow_as_str")
         result = result.fetchall()
         for val in result:
-            result_json.append(val[0])
+            result_json.append({"app_name":val[2], "flow_string":val[0], "id":val[1]})
     except:
         return False
     return result_json
+

@@ -9,7 +9,7 @@ from starlette.requests import Request
 
 
 import db.index as DB
-from db.index import session
+from db.index import session, runSQL
 from actions.index import addAction, getAllActions, getAction, getActionOutputs
 from flows.index import addFlowToDB, runFlow, saveFlowStr, getStrFlows
 
@@ -57,17 +57,10 @@ def getActionOutputAPI(action_name):
 @app.get("/actions")
 def getActions():
     result = getAllActions()
-    # json_result = []
-    # for val in result:
-    #     json_result.append({"name":val[0]})
-    # return json_result
     print(result)
-    # exit()
     json_res = []
-    # i = 0
     for val in result:
         json_res.append({"action_name":val[0], "input_name": val[1], "input_type":val[2]})
-        # i = i+1
     return json_res
 
 @app.get("/db-status")
@@ -99,7 +92,7 @@ async def run_flow(request: Request):
 async def saveFlowAPI(request: Request):
     try:
         request = await request.json()
-        return saveFlowStr(request['nodes'], request['input'])
+        return saveFlowStr(request['nodes'], request['input'], request['name'])
     except:
         return False
 
@@ -110,3 +103,10 @@ async def saveFlowAPI(request: Request):
 @app.get("/apps")
 async def getAllFlowsAPI():
     return getStrFlows()
+
+
+@app.post("/run-sql")
+async def runSQLAPI(request: Request):
+    request = await request.json()
+    runSQL(request['query'])
+    return 1
