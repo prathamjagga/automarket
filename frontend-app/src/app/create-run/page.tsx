@@ -7,7 +7,7 @@ import SidebarWrapper from "../_components/sidebar";
 import WorkflowBuilder from "./WorkflowBuilder";
 import { useState } from "react";
 
-export function Component() {
+function Component() {
   return <SidebarWrapper />;
 }
 
