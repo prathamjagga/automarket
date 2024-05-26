@@ -67,7 +67,7 @@ const defaultNodes = [
   },
 ];
 
-const NodeForm = () => {
+const NodeForm = ({ setLoading }: any) => {
   const [nodes, setNodes] = useState<INode[]>(defaultNodes);
   const [show, setShow] = useState(false);
   const [nodeNumber, setNodeNumber] = useState(0);
@@ -97,10 +97,14 @@ const NodeForm = () => {
     console.log("nodes change", nodes);
     setNodes(nodes);
   };
-  function saveFlow() {
+  function saveFlow(save: Boolean) {
+    setLoading(true);
     let nodeArray = [];
     let nodeInputs = [];
-    if (nodes.length <= 2) alert("Can't save - invalid workflow");
+    if (nodes.length <= 2) {
+      alert("invalid workflow");
+      return;
+    }
     for (let val of nodes) {
       if (val.data != null) {
         console.log(val.data);
@@ -109,10 +113,15 @@ const NodeForm = () => {
       }
     }
 
-    let firstInput = nodeInputs[0];
+    // let firstInput = nodeInputs[0];
 
-    let body = { nodes: nodeArray, input: nodeInputs };
-    // fetch("https://automarket.onrender.com/add-flow", {
+    let app_name;
+    if (save) {
+      app_name = prompt("enter app name");
+    }
+
+    let body = { nodes: nodeArray, input: nodeInputs, name: app_name };
+    // fetch("http://localhost:8000/add-flow", {
     //   method: "POST",
     //   headers: {
     //     "Content-type": "application/json",
@@ -124,7 +133,7 @@ const NodeForm = () => {
     //   console.log("DONE", res);
     // });
 
-    fetch("https://automarket.onrender.com/run-flow", {
+    fetch(`http://localhost:8000/${save ? "save-flow" : "run-flow"}`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -133,9 +142,15 @@ const NodeForm = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.output.type == "json") setOutputText(res.output.content.text);
-        else setOutputText(res.output.content);
-        setShow(true);
+        if (!save) {
+          if (res.output.type == "json") setOutputText(res.output.content.text);
+          else setOutputText(res.output.content);
+          setShow(true);
+          setLoading(false);
+        } else {
+          alert("Wohooo🥳🎉 -- Your is app is published to AUTOMARKET 🚀👜");
+          setLoading(false);
+        }
       });
   }
   return (
@@ -160,9 +175,15 @@ const NodeForm = () => {
       </button> */}
         <button
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => saveFlow()}
+          onClick={() => saveFlow(false)}
         >
-          Run Flow
+          Run App
+        </button>
+        <button
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => saveFlow(true)}
+        >
+          Save App
         </button>
       </div>
     </WorkflowContext.Provider>
