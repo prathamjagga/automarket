@@ -1,48 +1,14 @@
 "use client";
 
-import { Sidebar } from "flowbite-react";
-import { HiChartPie, HiViewBoards } from "react-icons/hi";
+import { Oval } from "react-loader-spinner";
 import GlobalContext from "../GlobalContext";
+import SidebarWrapper from "../_components/sidebar";
 
 import WorkflowBuilder from "./WorkflowBuilder";
+import { useState } from "react";
 
-function Component() {
-  return (
-    // <GlobalContext.Provider vale>
-    <Sidebar aria-label="Default sidebar example">
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            App Builder 👷‍♂️
-          </Sidebar.Item>
-          {/* <Sidebar.Item
-            href="/run-apps"
-            icon={HiViewBoards}
-            // label="Pro"
-            labelColor="dark"
-          >
-            Run Apps 🚀
-          </Sidebar.Item> */}
-        </Sidebar.ItemGroup>
-        <Sidebar.ItemGroup
-          style={{ position: "absolute", bottom: "10px", left: "20px" }}
-        >
-          {/* <Sidebar.Item
-            href="#"
-            icon={HiViewBoards}
-            // label="Pro"
-            labelColor="dark"
-            onClick={() => {
-              alert("Flow saved as app");
-            }}
-          >
-            Save flow as App
-          </Sidebar.Item> */}
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
-    // </GlobalContext.Provider>
-  );
+export function Component() {
+  return <SidebarWrapper />;
 }
 
 function AppBuilderCanvas() {
@@ -105,15 +71,30 @@ function AppBuilder() {
 }
 
 function CreateRun() {
+  const [loading, setLoading] = useState(false);
   return (
     <div>
+      {loading ? (
+        <Oval
+          visible={true}
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      ) : (
+        ""
+      )}
+
       <div className="flex flex-row">
         <div>
           <Component />
         </div>
         <div>
           {/* <AppBuilder /> */}
-          <WorkflowBuilder />
+          <WorkflowBuilder setLoading={setLoading} />
         </div>
       </div>
     </div>
