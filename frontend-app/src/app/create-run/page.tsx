@@ -6,7 +6,7 @@ import GlobalContext from "../GlobalContext";
 
 import WorkflowBuilder from "./WorkflowBuilder";
 
-export function Component() {
+function Component() {
   return (
     // <GlobalContext.Provider vale>
     <Sidebar aria-label="Default sidebar example">
