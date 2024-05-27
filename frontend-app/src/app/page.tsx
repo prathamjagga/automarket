@@ -1,3 +1,10 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
 export default function Page() {
-  return <div>Please navigate to /create-run</div>;
+  let router = useRouter();
+  useEffect(() => {
+    router.push("/create-run");
+  }, []);
+  return <div>Setting up, please wait 🙂</div>;
 }
