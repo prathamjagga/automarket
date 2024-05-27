@@ -16,7 +16,7 @@ def run_python_file(file_path, arg):
         return output
     except Exception as e:
         print("Error:", e)
-        return None
+        return json.dumps({"output":{"type":"error", "content":str(e)}})
     
 def run_sequence(files, inputs):
     print("FILES", files)
