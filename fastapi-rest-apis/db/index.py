@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
-DB_URL = "postgresql://avnadmin:AVNS_25aaE9ObriOz2qNOl5X@pg-1629d2c5-prathamjagga123-cbe1.h.aivencloud.com:13791/automarket?sslmode=require"
+DB_URL = ""
 
 def createDBSession():
     engine = create_engine(DB_URL)
