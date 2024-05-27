@@ -121,7 +121,7 @@ const NodeForm = ({ setLoading }: any) => {
     }
 
     let body = { nodes: nodeArray, input: nodeInputs, name: app_name };
-    // fetch("http://localhost:8000/add-flow", {
+    // fetch("https://starfish-app-qfx4x.ondigitalocean.app/add-flow", {
     //   method: "POST",
     //   headers: {
     //     "Content-type": "application/json",
@@ -133,13 +133,16 @@ const NodeForm = ({ setLoading }: any) => {
     //   console.log("DONE", res);
     // });
 
-    fetch(`http://localhost:8000/${save ? "save-flow" : "run-flow"}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
+    fetch(
+      `https://starfish-app-qfx4x.ondigitalocean.app/${save ? "save-flow" : "run-flow"}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(body),
-    })
+    )
       .then((res) => res.json())
       .then((res) => {
         if (!save) {

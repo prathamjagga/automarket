@@ -18,7 +18,7 @@ const ConfigForm: React.FC = () => {
   // console.log("NODES", nodes);/
   // console.log("NODES", nodes)
   useEffect(() => {
-    fetch("https://automarket.onrender.com/actions")
+    fetch("https://starfish-app-qfx4x.ondigitalocean.app/actions")
       .then((res) => res.json())
       .then((res) => {
         // setActionItems(res);
@@ -28,7 +28,7 @@ const ConfigForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // fetch("https://automarket.onrender.com/output/");
+    // fetch("https://starfish-app-qfx4x.ondigitalocean.app/output/");
     console.log("moved here");
     if (nodes.length > 3) {
       let idx = 0;
@@ -47,7 +47,10 @@ const ConfigForm: React.FC = () => {
         nodes[idx].data != null &&
         nodes[idx].data.name != "select an action"
       ) {
-        fetch("https://automarket.onrender.com/outputs/" + nodes[idx].data.name)
+        fetch(
+          "https://starfish-app-qfx4x.ondigitalocean.app/outputs/" +
+            nodes[idx].data.name,
+        )
           .then((res) => res.json())
           .then((res) => {
             setPrevNodeOutputs(res.outputs);
@@ -62,7 +65,7 @@ const ConfigForm: React.FC = () => {
     setFields(null);
     setFieldValues(null);
     let inputs = await fetch(
-      "https://automarket.onrender.com/action/" + e.target.value,
+      "https://starfish-app-qfx4x.ondigitalocean.app/action/" + e.target.value,
     );
     inputs.json().then((res) => {
       setFields(res.inputs);
