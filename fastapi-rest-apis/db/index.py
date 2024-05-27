@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 
-DB_URL = ""
+DB_URL = os.environ['DB_URL']
 
 def createDBSession():
     engine = create_engine(DB_URL)
