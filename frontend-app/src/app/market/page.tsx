@@ -23,7 +23,7 @@ function Market() {
     // let firstInput = nodeInputs[0];
 
     let body = { nodes: nodeArray, input: nodeInputs };
-    // fetch("https://automarket.onrender.com/add-flow", {
+    // fetch("https://starfish-app-qfx4x.ondigitalocean.app/add-flow", {
     //   method: "POST",
     //   headers: {
     //     "Content-type": "application/json",
@@ -36,7 +36,7 @@ function Market() {
     // });
 
     fetch(
-      `https://automarket.onrender.com/${save ? "save-flow" : "run-flow"}`,
+      `https://starfish-app-qfx4x.ondigitalocean.app/${save ? "save-flow" : "run-flow"}`,
       {
         method: "POST",
         headers: {
@@ -59,7 +59,7 @@ function Market() {
 
   const [apps, setApps] = useState([]);
   useEffect(() => {
-    fetch("https://automarket.onrender.com/apps")
+    fetch("https://starfish-app-qfx4x.ondigitalocean.app/apps")
       .then((res) => res.json())
       .then((res) => setApps(res));
   }, []);
