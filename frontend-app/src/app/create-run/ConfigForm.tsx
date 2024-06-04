@@ -22,7 +22,10 @@ const ConfigForm: React.FC = () => {
       .then((res) => res.json())
       .then((res) => {
         // setActionItems(res);
-        setActionItems(["textSummarizer", "readFile"]);
+        let actions = res.map((item: any) => item.action_name);
+        let uniqueActions = [...new Set(actions)];
+
+        setActionItems(uniqueActions);
         setFieldValues(res);
       });
   }, []);
