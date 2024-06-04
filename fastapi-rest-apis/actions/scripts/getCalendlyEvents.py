@@ -10,4 +10,4 @@ try:
     print(json.dumps({ "output": {"type":"json", "content":events.json()}}))
           
 except Exception as e:
-    print(json.dumps({"output": {"type": "error", "content": e}}))
+    print(json.dumps({"output": {"type": "error", "content": str(e)}}))
