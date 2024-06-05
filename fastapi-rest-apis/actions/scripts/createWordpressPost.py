@@ -16,7 +16,9 @@ def get_output(input_json):
 
         post_title = input_json["post_title"]
         post_content = input_json["post_content"]
+
         
+        # TODO: if there's a slash at the end of wordpress_url remove it
         response =requests.post(f"{wordpress_url}/wp-json/wp/v2/posts",headers={"Authorization": f"Basic {base64_string}"}, json={
             "title":post_title,
             "content":post_content,
