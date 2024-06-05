@@ -13,7 +13,8 @@ def run_python_file(file, arg):
     try:
         print("ARG without json", arg)
         print("ARG", json.dumps(arg))
-        output = importlib.import_module("actions.scripts."+file).get_output(json.dumps(arg))
+        output = importlib.import_module("actions.scripts."+file).get_output(arg)
+        print("REA")
         return output
     except Exception as e:
         print("Error:", e)

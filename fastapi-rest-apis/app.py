@@ -81,6 +81,7 @@ async def addFlow(request: Request):
 
 @app.post("/run-flow")
 async def run_flow(request: Request):
+    print("RUN")
     request = await request.json()
     print("REQ", request)
     flow_input = request

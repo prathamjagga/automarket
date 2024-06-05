@@ -1,5 +1,3 @@
-# import requests
-import sys
 import json
 import requests
 
@@ -20,6 +18,7 @@ def summarize(text):
 
 def get_output(input_json):
 	try:
+		print(type(input_json))
 		text = input_json["text"]
 		return(json.dumps({"output":{"type":"text", "content": text[:100]}})) ## TODO : replace content by summarize(text) after subscription
 	except Exception as e:
