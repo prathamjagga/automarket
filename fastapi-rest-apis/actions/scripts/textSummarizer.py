@@ -18,11 +18,9 @@ def summarize(text):
 
 	print(response.json())
 
-try:
-	# print(sys.argv[1])
-	a = sys.argv[1]
-	input_json = json.loads(sys.argv[1])
-	text = input_json["text"]
-	print(json.dumps({"output":{"type":"text", "content": text[:100]}})) ## TODO : replace content by summarize(text) after subscription
-except Exception as e:
-	print(json.dumps({"output":{"type":"error", "content":str(e)}}))
+def get_output(input_json):
+	try:
+		text = input_json["text"]
+		return(json.dumps({"output":{"type":"text", "content": text[:100]}})) ## TODO : replace content by summarize(text) after subscription
+	except Exception as e:
+		return (json.dumps({"output":{"type":"error", "content":str(e)}}))

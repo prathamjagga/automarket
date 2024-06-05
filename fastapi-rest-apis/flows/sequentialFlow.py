@@ -3,16 +3,17 @@
 import sys
 import subprocess
 import json
+import importlib
 
 # exit()
-def run_python_file(file_path, arg):
+def run_python_file(file, arg):
     print("XYZ")
-    print("FILE PATH", file_path)
+    print("FILE PATH", file)
     # print("ARG", arg)
     try:
         print("ARG without json", arg)
         print("ARG", json.dumps(arg))
-        output = subprocess.check_output(["python", file_path, json.dumps(arg)], stderr=subprocess.STDOUT, universal_newlines=True)
+        output = importlib.import_module(file).get_output(json.dumps(arg))
         return output
     except Exception as e:
         print("Error:", e)
@@ -35,7 +36,7 @@ def run_sequence(files, inputs):
                         output = dict(json.loads(output))
                         inputs[idx][key] = output['output']['content'][str(val[6:(len(val)-1)])]
                 # pass
-            output = run_python_file(f"./actions/scripts/{file}.py", inputs[idx])
+            output = run_python_file(file, inputs[idx])
             print(f"OP {idx}", output)
             idx = idx + 1
         print("OP in runSequence", output)

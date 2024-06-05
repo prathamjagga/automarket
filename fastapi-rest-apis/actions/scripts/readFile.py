@@ -12,14 +12,12 @@ def read_file_from_url(url):
             return data
     except Exception as e:
         return e
-
-try:
-    # Check if URL is provided as command-line argument
-    input_json = json.loads(sys.argv[1])
-    file_url = input_json["url"]
-    file_contents = read_file_from_url(file_url)
-    if file_contents:
-        print(json.dumps({"output": {"type": "json", "content": {"text": file_contents}}}))
-except:
-    print(json.dumps({"output": {"type": "error", "content": "Error reading file."}}))
-    pass
+    
+def get_output(input_json):
+    try:
+        file_url = input_json["url"]
+        file_contents = read_file_from_url(file_url)
+        if file_contents:
+            return (json.dumps({"output": {"type": "json", "content": {"text": file_contents}}}))
+    except:
+        return (json.dumps({"output": {"type": "error", "content": "Error reading file."}}))
