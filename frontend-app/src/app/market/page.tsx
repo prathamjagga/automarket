@@ -48,7 +48,8 @@ function Market() {
       .then((res) => res.json())
       .then((res) => {
         if (!save) {
-          if (res.output.type == "json") setOutputText(res.output.content.text);
+          if (res.output.type == "json" && res.output.content.text)
+            setOutputText(res.output.content.text);
           else setOutputText(res.output.content);
           setShow(true);
         } else {
