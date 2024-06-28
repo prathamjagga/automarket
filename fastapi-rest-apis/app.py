@@ -97,6 +97,20 @@ async def saveFlowAPI(request: Request):
     except:
         return False
 
+    # response = requests.post(
+    #     f"https://api.stability.ai/v2beta/stable-image/generate/ultra",
+    #     headers={
+    #         "authorization": f"Bearer ",
+    #         "accept": "image/*"
+    #     },
+    #     files={"none": ''},
+    #     data={
+    #         "prompt": "Lighthouse on a cliff overlooking the ocean",
+    #         "output_format": "webp",
+    #     },
+    # )
+
+    # return response.content
 # if __name__ == "main":
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
 

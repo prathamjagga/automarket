@@ -1,36 +1,38 @@
-import requests
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import os
+import json
 
-def send_email_via_mailchimp(api_key, audience_id, email, content):
-    url = f"https://us1.api.mailchimp.com/3.0/lists/{audience_id}/members"
-    headers = {
-        "Authorization": f"Basic {api_key}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "email_address": email,
-        "status": "subscribed",
-        "merge_fields": {
-            "FNAME": "Subscriber",
-            "LNAME": "Name"
-        }
-    }
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        if response.status_code == 200:
-            print("Email sent successfully!")
-        else:
-            print("Failed to send email. Status code:", response.status_code)
-    except Exception as e:
-        print("Error sending email:", e)
+# Email and password configuration
+sender_email = "prathamjagga123@gmail.com"
+receiver_email = "vipul.kumar@cloudeq.com"
+password = "yaik zgzh zrwr pylj"
 
-if __name__ == "__main__":
-    # Specify Mailchimp API key and audience ID
-    api_key = input("Enter your Mailchimp API key: ")
-    audience_id = input("Enter your Mailchimp audience ID: ")
+# Email content
+subject = "Test Email from Python"
+body = "Vipul Yamunanagar Wale"
 
-    # Specify recipient email and email content
-    email = input("Enter recipient email address: ")
-    content = input("Enter email content: ")
+# Create a multipart message and set headers
+message = MIMEMultipart()
+message["From"] = sender_email
+message["To"] = receiver_email
+message["Subject"] = subject
 
-    # Send the email
-    send_email_via_mailchimp(api_key, audience_id, email, content)
+# Add body to email
+message.attach(MIMEText(body, "plain"))
+
+try:
+    # Log in to the SMTP server
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()  # Secure the connection
+    server.login(sender_email, password)
+
+    # Send email
+    server.sendmail(sender_email, receiver_email, message.as_string())
+    json.dumps("Email(s) successfully sent!")
+except Exception as e:
+    json.dumps(f"Error sending email(s): {e}")
+finally:
+    # Quit the SMTP server
+    server.quit()
