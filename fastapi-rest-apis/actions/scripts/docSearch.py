@@ -4,9 +4,8 @@ import json
 def find_occurrences(text, keyword):
     occurrences = text.lower().count(keyword.lower())
     return occurrences
-def get_output():
+def get_output(input_json):
     try:
-        input_json = json.loads(sys.argv[1])
         text = input_json["text"]
         keyword = input_json["keyword"]
         num_occurrences = find_occurrences(text, keyword)

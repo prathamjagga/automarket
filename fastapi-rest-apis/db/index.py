@@ -5,6 +5,8 @@ import os
 
 DB_URL = os.environ['DB_URL'] 
 
+
+
 def createDBSession():
     engine = create_engine(DB_URL)
     Session = sessionmaker(bind=engine)
