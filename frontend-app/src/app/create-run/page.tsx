@@ -3,7 +3,7 @@
 import { Oval } from "react-loader-spinner";
 import GlobalContext from "../GlobalContext";
 import SidebarWrapper from "../_components/sidebar";
-
+import Footer from "../_components/footer"
 import WorkflowBuilder from "./WorkflowBuilder";
 import { useState } from "react";
 
@@ -95,6 +95,7 @@ function CreateRun() {
         <div>
           {/* <AppBuilder /> */}
           <WorkflowBuilder setLoading={setLoading} />
+          <Footer />
         </div>
       </div>
     </div>

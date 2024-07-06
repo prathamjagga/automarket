@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SidebarWrapper from "../_components/sidebar";
 import OutputModal from "../_components/output-component";
+import Footer from "../_components/footer";
 
 function Market() {
   const [show, setShow] = useState(false);
@@ -92,6 +93,7 @@ function Market() {
               </button>
             </div>
           ))}
+          <Footer />
         </div>
       </div>
     </div>
