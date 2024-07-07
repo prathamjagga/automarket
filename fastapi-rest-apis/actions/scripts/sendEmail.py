@@ -1,38 +1,39 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import os
-import json
+def get_output(input_json):
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    import os
+    import json
 
-# Email and password configuration
-sender_email = "prathamjagga123@gmail.com"
-receiver_email = "vipul.kumar@cloudeq.com"
-password = "yaik zgzh zrwr pylj"
+    # Email and password configuration
+    sender_email = input_json["sender_email"]
+    receiver_email = input_json["receiver_email"]
+    password = input_json["app_password"]
 
-# Email content
-subject = "Test Email from Python"
-body = "Vipul Yamunanagar Wale"
+    # Email content
+    subject = input_json["subject"]
+    body = input_json["body"]
 
-# Create a multipart message and set headers
-message = MIMEMultipart()
-message["From"] = sender_email
-message["To"] = receiver_email
-message["Subject"] = subject
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
 
-# Add body to email
-message.attach(MIMEText(body, "plain"))
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
 
-try:
-    # Log in to the SMTP server
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()  # Secure the connection
-    server.login(sender_email, password)
+    try:
+        # Log in to the SMTP server
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()  # Secure the connection
+        server.login(sender_email, password)
 
-    # Send email
-    server.sendmail(sender_email, receiver_email, message.as_string())
-    json.dumps("Email(s) successfully sent!")
-except Exception as e:
-    json.dumps(f"Error sending email(s): {e}")
-finally:
-    # Quit the SMTP server
-    server.quit()
+        # Send email
+        server.sendmail(sender_email, receiver_email, message.as_string())
+        return (json.dumps({"output": {"type": "json", "content": {"text": "Email sent successfully!"}}}))
+    except Exception as e:
+        return (json.dumps({"output": {"type": "error", "content": "Error sending email."}}))
+    finally:
+        # Quit the SMTP server
+        server.quit()
