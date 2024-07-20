@@ -72,20 +72,67 @@ Robust error handling to ensure smooth execution of your automation workflows.
 
 python sequentialFlow.py ./actions/readFile.py ./actions/textSummarizer.py https://www.dwsamplefiles.com/?dl_id=176
 
-## 🤝 Contributing
-We welcome contributions! Please check out our Contributing Guidelines and Code of Conduct.
+<div>
+  <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.webp" width="35" height="35"> Ready to Contribute?</h2>
+</div>
 
-## 📝 License
-This project is licensed under the GNU License. See the LICENSE file for details.
+Kindly go through [CONTRIBUTING.md](https://github.com/prathamjagga/automarket/blob/main/CONTRIBUTING.md) to understand everything from setup to contributing guidelines.
+
+If you would like to contribute to the project, please follow our contribution guidelines.
+
+<!-- Open Source Programs -->
+  <div>
+    <h2><img src="https://github.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/blob/master/Emojis/Hand%20gestures/Flexed%20Biceps.png?raw=true" width="35" height="35" > Open Source Programs</h2>
+  </div>
+
+  <table border="1" cellpadding="10">
+        <tr>
+            <td rowspan="2">
+                <img src="https://github.com/user-attachments/assets/6bcde2b3-a688-4ef8-a018-d83f912dae7c" alt="GSSOC Logo" width="100" height="55">
+            </td>
+            <td>
+                <strong>GSSOC 2024</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                This project is part of GirlScript Summer of Code. We welcome contributions from the community.
+            </td>
+        </tr>
+    </table>
+
+<hr>
+
+<!-- Code of conduct -->
+<div>
+<h2><img src = "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Handshake.png" width="35" height="35"> Code of Conduct</h2>
+</div>
+
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+<hr>
+
+<!-- License -->
+<div>
+<h2><img src = "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" width="35" height="35"> License</h2>
+</div>
+
+This project is licensed under the [GPL-3.0](./LICENSE).
+
+<hr>
+
+<div>
+  <h2><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764_fe0f/512.webp" width="35" height="35"> Show Your Support</h2>
+</div>
+
+If you find this project interesting and inspiring, please consider showing your support by starring it on GitHub!
+
+<hr>
  
-<h2 align = "center">Our Contributors ❤️</h2>
-<div align = "center">
+<h2 >Our Contributors ❤️</h2>
+<div>
  <h3>Thank you for contributing to our repository</h3>
 
 ![Contributors](https://contrib.rocks/image?repo=knight1001d/automarket)
 
 </div>
-
-
-
-
