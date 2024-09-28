@@ -3,7 +3,7 @@
 import { list } from "postcss";
 import React, { useContext, useEffect, useState } from "react";
 import { BuilderContext, useDrawer } from "react-flow-builder";
-
+import { SERVER_URL } from "../../env";
 export default function ConfigFormWrapped(
   nodes: any,
   nodeNumber: any,
@@ -11,7 +11,7 @@ export default function ConfigFormWrapped(
   const ConfigForm: React.FC = () => {
     console.log("NODES", nodes);
     useEffect(() => {
-      fetch("https://automarket.onrender.com/actions")
+      fetch(`${SERVER_URL}/actions`)
         .then((res) => res.json())
         .then((res) => {
           // setActionItems(res);

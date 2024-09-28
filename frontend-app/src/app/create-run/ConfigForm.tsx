@@ -4,6 +4,7 @@ import { list } from "postcss";
 import React, { useContext, useEffect, useState } from "react";
 import { BuilderContext, useDrawer } from "react-flow-builder";
 import WorkflowContext from "./WorkflowContext";
+import { SERVER_URL } from "../../env";
 
 const ConfigForm: React.FC = () => {
   // const { nodes, setNodes } = useContext(WorkflowContext);
@@ -18,7 +19,7 @@ const ConfigForm: React.FC = () => {
   // console.log("NODES", nodes);/
   // console.log("NODES", nodes)
   useEffect(() => {
-    fetch("https://automarket.onrender.com/actions")
+    fetch(`${SERVER_URL}/actions`)
       .then((res) => res.json())
       .then((res) => {
         // setActionItems(res);
@@ -50,7 +51,7 @@ const ConfigForm: React.FC = () => {
         nodes[idx].data != null &&
         nodes[idx].data.name != "select an action"
       ) {
-        fetch("https://automarket.onrender.com/outputs/" + nodes[idx].data.name)
+        fetch(`${SERVER_URL}/outputs/` + nodes[idx].data.name)
           .then((res) => res.json())
           .then((res) => {
             setPrevNodeOutputs(res.outputs);

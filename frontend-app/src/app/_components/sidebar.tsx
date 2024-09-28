@@ -15,6 +15,9 @@ function SidebarWrapper({ setName }: any) {
           <Link href="market">
             <Sidebar.Item icon={HiChartPie}>AutoMarket 🚀👜</Sidebar.Item>{" "}
           </Link>
+          <Link href="connections">
+            <Sidebar.Item icon={HiChartPie}>Connections 🔌</Sidebar.Item>{" "}
+          </Link>
 
           {/* <Sidebar.Item
             href="/run-apps"

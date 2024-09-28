@@ -14,6 +14,7 @@ import "./index.css";
 import OutputModal from "../_components/output-component";
 import ConfigFormWrapped from "./ConfigFormWrapped";
 import WorkflowContext from "./WorkflowContext";
+import { SERVER_URL } from "../../env";
 
 const StartNodeDisplay: React.FC = () => {
   const node = useContext(NodeContext);
@@ -133,16 +134,13 @@ const NodeForm = ({ setLoading }: any) => {
     //   console.log("DONE", res);
     // });
 
-    fetch(
-      `https://automarket.onrender.com/${save ? "save-flow" : "run-flow"}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
+    fetch(`${SERVER_URL}/${save ? "save-flow" : "run-flow"}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
       },
-    )
+      body: JSON.stringify(body),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (!save) {

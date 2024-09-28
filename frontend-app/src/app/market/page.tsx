@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SidebarWrapper from "../_components/sidebar";
 import OutputModal from "../_components/output-component";
+import { SERVER_URL } from "~/env";
 
 function Market() {
   const [show, setShow] = useState(false);
@@ -35,16 +36,13 @@ function Market() {
     //   console.log("DONE", res);
     // });
 
-    fetch(
-      `https://automarket.onrender.com/${save ? "save-flow" : "run-flow"}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(body),
+    fetch(`${SERVER_URL}/${save ? "save-flow" : "run-flow"}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
       },
-    )
+      body: JSON.stringify(body),
+    })
       .then((res) => res.json())
       .then((res) => {
         if (!save) {
@@ -60,7 +58,7 @@ function Market() {
 
   const [apps, setApps] = useState([]);
   useEffect(() => {
-    fetch("https://automarket.onrender.com/apps")
+    fetch(`${SERVER_URL}/apps`)
       .then((res) => res.json())
       .then((res) => setApps(res));
   }, []);
