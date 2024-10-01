@@ -125,3 +125,20 @@ async def runSQLAPI(request: Request):
     request = await request.json()
     runSQL(request['query'])
     return 1
+
+@app.post("/add-connection")
+async def addConnection(request: Request):
+    request = await request.json()
+    name = request['name']
+    token = request['token']
+    runSQL(f"insert into connections (name, token) values ('{name}', '{token}')")
+    return True
+
+@app.get("/connections")
+async def getConnections():
+    result = runSQL("select * from connections")
+    result = result.fetchall()
+    json_res = []
+    for val in result:
+        json_res.append({"platform":val[0], "token": val[1], "username":val[2], "password":val[3]})
+    return json_res

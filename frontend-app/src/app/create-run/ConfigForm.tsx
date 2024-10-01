@@ -11,6 +11,14 @@ const ConfigForm: React.FC = () => {
   let workflowContext: any = useContext(WorkflowContext);
   let [prevNodeOutputs, setPrevNodeOutputs] = useState([]);
   let [prevNodeIdx, setPrevNodeIdx] = useState<number>(0);
+  let [showSelectConnection, setShowSelectConnection] = useState(false);
+  let [connections, setConnections] = useState([]);
+  let [selectedConnection, setSelectedConnection] = useState({
+    platform: "",
+    token: "",
+    username: "",
+    password: "",
+  });
   let nodes = workflowContext.nodes;
   let setNodes = workflowContext.setNodes;
   const { selectedNode }: any = useContext(BuilderContext);
@@ -25,15 +33,12 @@ const ConfigForm: React.FC = () => {
         // setActionItems(res);
         let actions = res.map((item: any) => item.action_name);
         let uniqueActions = [...new Set(actions)];
-
         setActionItems(uniqueActions);
         setFieldValues(res);
       });
   }, []);
 
   useEffect(() => {
-    // fetch("https://automarket.onrender.com/output/");
-    console.log("moved here");
     if (nodes.length > 3) {
       let idx = 0;
       for (let node of nodes) {
@@ -61,15 +66,50 @@ const ConfigForm: React.FC = () => {
     }
   }, [selectedNode]);
 
+  async function fetchConnectons() {
+    fetch(`${SERVER_URL}/connections`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("RECIEVED CONNECTIONS", res);
+        setConnections(res);
+      });
+  }
+
+  function selectConnection(e: any) {
+    debugger;
+    console.log("SELECTED CONNECTION", e.target.value);
+    setSelectedConnection(e.target.value);
+    let connectionByName: any = connections.find(
+      (x: any) => x.platform == e.target.value,
+    );
+    setFieldValues({
+      ...fieldValues,
+      token: connectionByName.token,
+    });
+  }
   async function handleSelectionChange(e: any) {
     setName(e.target.value);
     setFields(null);
     setFieldValues(null);
-    let inputs = await fetch(
-      "https://automarket.onrender.com/action/" + e.target.value,
-    );
+    let inputs = await fetch(`${SERVER_URL}/action/` + e.target.value);
     inputs.json().then((res) => {
-      setFields(res.inputs);
+      console.log("RES INPUTS", res.inputs);
+      let resIncludesToken = false;
+      res.inputs.map((item: any) => {
+        if (item.name == "token") {
+          resIncludesToken = true;
+        }
+      });
+      if (resIncludesToken) {
+        setShowSelectConnection(true);
+        fetchConnectons();
+        let fieldsWithoutToken = res.inputs.filter((item: any) => {
+          return item.name != "token";
+        });
+        setFields(fieldsWithoutToken);
+      } else {
+        setFields(res.inputs);
+      }
       setFieldValues({});
     });
   }
@@ -126,6 +166,20 @@ const ConfigForm: React.FC = () => {
                   })
                 }
               />
+            )}
+            {showSelectConnection && (
+              <>
+                <label>Select a connection</label>
+                <select
+                  value={selectedConnection.platform}
+                  onChange={selectConnection}
+                >
+                  <option>Select an connection</option>
+                  {connections.map((c: any) => (
+                    <option>{c.platform}</option>
+                  ))}
+                </select>
+              </>
             )}
           </>
         ))}

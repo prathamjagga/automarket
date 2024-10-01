@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SERVER_URL } from "~/env";
 
 export default function ConnectionsForm({ setShowAddConnectionPopup }: any) {
   const [platform, setPlatform] = useState("");
@@ -8,8 +9,13 @@ export default function ConnectionsForm({ setShowAddConnectionPopup }: any) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Submitted:", { platform, token });
-    // Here you would typically send the data to your backend
+    fetch(`${SERVER_URL}/add-connection`, {
+      body: JSON.stringify({
+        name: platform,
+        token: token,
+      }),
+      method: "POST",
+    }).then(() => alert("token added successfully"));
   };
 
   return (
