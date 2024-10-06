@@ -4,7 +4,7 @@ import { Sidebar } from "flowbite-react";
 import { HiChartPie, HiViewBoards } from "react-icons/hi";
 import Link from "next/link";
 
-function SidebarWrapper({ setName }: any) {
+function SidebarWrapper() {
   return (
     <Sidebar style={{ height: "100vh" }} aria-label="Default sidebar example">
       <Sidebar.Items>

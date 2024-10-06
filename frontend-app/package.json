@@ -20,6 +20,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "@xyflow/react": "^12.3.1",
     "antd": "^5.16.5",
     "babel-plugin-import": "^1.13.8",
     "flowbite": "^2.3.0",
@@ -33,6 +34,7 @@
     "react-loader-spinner": "^6.1.6",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
+    "uuid": "^10.0.0",
     "zod": "^3.23.3"
   },
   "devDependencies": {

@@ -1,104 +1,73 @@
 "use client";
 
-import { Oval } from "react-loader-spinner";
-import GlobalContext from "../GlobalContext";
 import SidebarWrapper from "../_components/sidebar";
 
-import WorkflowBuilder from "./WorkflowBuilder";
-import { useState } from "react";
+import { ReactFlow, Background, Controls } from "@xyflow/react";
 
-function Component() {
-  return <SidebarWrapper />;
-}
+import "@xyflow/react/dist/style.css";
+import { useEffect, useState } from "react";
+import { SERVER_URL } from "~/env";
 
-function AppBuilderCanvas() {
-  const entities = ["Read Text File 📚", "Summarize Text 📃"];
-
-  console.log("Entities", entities);
-
-  const DraggableEntity = ({ id }: any) => {
-    const dragStart = (e: any) => {
-      console.log("dragging!", e.target.id);
-      e.dataTransfer.setData("entity", e.target.id);
-    };
-    return (
-      <div
-        className="draggableEntity"
-        id={id}
-        draggable="true"
-        onDragStart={dragStart}
-      />
-    );
-  };
-
-  const DroppableArea = ({ id }: any) => {
-    const drop = (e: any) => {
-      e.preventDefault();
-      const data = e.dataTransfer.getData("entity");
-      e.target.appendChild(document.getElementById(data));
-      console.log("yep");
-    };
-    const allowDrop = (e: any) => {
-      e.preventDefault();
-    };
-    return (
-      <div className="droppableArea" onDrop={drop} onDragOver={allowDrop}>
-        hey
-      </div>
-    );
-  };
-
+export default function Page() {
+  /* states for nodes and edges */
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [actions, setActions] = useState([]);
+  async function fetchActions() {
+    const res = await fetch(`${SERVER_URL}/actions`);
+    const data = await res.json();
+    let uniqueActionNames = data.map((action: any) => action.action_name);
+    uniqueActionNames = new Set(uniqueActionNames);
+    setActions(Array.from(uniqueActionNames));
+  }
+  useEffect(() => {
+    fetchActions();
+  }, []);
   return (
-    <main>
-      <div className="draggableArea">
-        {entities.map((entity) => (
-          <DraggableEntity key={entity} id={entity} />
-        ))}
-      </div>
-      <DroppableArea />
-    </main>
-  );
-}
-
-function AppBuilder() {
-  return (
-    <div>
-      <h1>Select actions in correct order.</h1>
-      <AppBuilderCanvas />
-      <button className="rounded bg-blue-500 p-2 text-white">Create</button>
-    </div>
-  );
-}
-
-function CreateRun() {
-  const [loading, setLoading] = useState(false);
-  return (
-    <div>
-      {loading ? (
-        <Oval
-          visible={true}
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="oval-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
-      ) : (
-        ""
-      )}
-
-      <div className="flex flex-row">
-        <div>
-          <Component />
+    <div className="flex flex-row">
+      <SidebarWrapper />
+      <div style={{ width: "600px", height: "80vh", background: "#F3F4F6" }}>
+        <ReactFlow nodes={nodes} edges={edges}>
+          <Background />
+          <Controls />
+        </ReactFlow>
+        <div className="action-buttons m-5 flex flex-row">
+          <button className="mr-5 bg-blue-500 p-2 hover:bg-blue-400">
+            Save to Market
+          </button>
+          <button className="bg-blue-500 p-2 hover:bg-blue-400">
+            Run Flow
+          </button>
         </div>
-        <div>
-          {/* <AppBuilder /> */}
-          <WorkflowBuilder setLoading={setLoading} />
+      </div>
+      <div className="ml-5 w-80">
+        <div className="actions-container">
+          <h1 className="w-100 mb-3 bg-gray-500">Add More Actions</h1>
+          <div
+            className="actions"
+            style={{ height: "370px", overflow: "scroll" }}
+          >
+            {actions.map((action: any) => {
+              return (
+                <>
+                  {" "}
+                  <button className="action mb-2 bg-blue-300 hover:bg-blue-400 ">
+                    <p>{action}</p>
+                  </button>
+                  <br></br>
+                </>
+              );
+            })}
+          </div>
+        </div>
+        <div className="workflow-runs">
+          <h1 className="w-100 mb-10 bg-gray-500">Workflow Runs</h1>
+          <div className="recent-run bg-gray-200">
+            <p>Run ID: 1</p>
+            <p>Status: Success</p>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default CreateRun;
