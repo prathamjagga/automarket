@@ -58,9 +58,6 @@ function Page() {
       },
     ]);
   }
-  function isValidLinearGraph(edges: any) {
-    return true;
-  }
 
   /* ui logic */
   const [actions, setActions] = useState([]);
@@ -72,9 +69,109 @@ function Page() {
     uniqueActionNames = new Set(uniqueActionNames);
     setActions(Array.from(uniqueActionNames));
   }
+  function getNodesInOrder(edges: any) {
+    const inDegree = new Map();
+    const outDegree = new Map();
+    const nodes = new Set();
+    const result = [];
+
+    // Populate in-degree, out-degree and all nodes
+    edges.forEach(({ source, target }: any) => {
+      nodes.add(source);
+      nodes.add(target);
+
+      // Calculate in-degree
+      inDegree.set(target, (inDegree.get(target) || 0) + 1);
+      inDegree.set(source, inDegree.get(source) || 0); // ensure source is in the map
+    });
+
+    // Topological sort using Kahn's Algorithm
+    const zeroInDegreeQueue = [];
+    for (let [node, degree] of inDegree.entries()) {
+      if (degree === 0) zeroInDegreeQueue.push(node);
+    }
+
+    while (zeroInDegreeQueue.length) {
+      const node = zeroInDegreeQueue.shift();
+      result.push(node);
+
+      for (let { source, target } of edges) {
+        if (source === node) {
+          inDegree.set(target, inDegree.get(target) - 1);
+          if (inDegree.get(target) === 0) {
+            zeroInDegreeQueue.push(target);
+          }
+        }
+      }
+    }
+
+    // If all nodes are in the result, it's a valid ordering
+    return result.length === nodes.size ? result : null;
+  }
+
+  function isLinearAcyclicGraph(edges: any) {
+    const inDegree = new Map();
+    const outDegree = new Map();
+    const nodes = new Set();
+
+    // Populate in-degree, out-degree and all nodes
+    edges.forEach(({ source, target }: any) => {
+      nodes.add(source);
+      nodes.add(target);
+
+      // Calculate in-degree
+      inDegree.set(target, (inDegree.get(target) || 0) + 1);
+      inDegree.set(source, inDegree.get(source) || 0); // ensure source is in the map
+
+      // Calculate out-degree
+      outDegree.set(source, (outDegree.get(source) || 0) + 1);
+      outDegree.set(target, outDegree.get(target) || 0); // ensure target is in the map
+    });
+
+    // Check that no node has more than one incoming or outgoing edge
+    for (let node of nodes) {
+      if (inDegree.get(node) > 1 || outDegree.get(node) > 1) {
+        return false; // not a linear graph if any node has more than one in or out degree
+      }
+    }
+
+    // Detect cycles using a topological sort (Kahn's Algorithm)
+    const zeroInDegreeQueue = [];
+    for (let [node, degree] of inDegree.entries()) {
+      if (degree === 0) zeroInDegreeQueue.push(node);
+    }
+
+    let visitedCount = 0;
+
+    while (zeroInDegreeQueue.length) {
+      const node = zeroInDegreeQueue.shift();
+      visitedCount++;
+
+      for (let { source, target } of edges) {
+        if (source === node) {
+          inDegree.set(target, inDegree.get(target) - 1);
+          if (inDegree.get(target) === 0) {
+            zeroInDegreeQueue.push(target);
+          }
+        }
+      }
+    }
+
+    // If the number of visited nodes is equal to the number of nodes, it's acyclic
+    return visitedCount === nodes.size;
+  }
 
   function saveToMarket() {
-    isValidLinearGraph(edges);
+    let nodesInOrder: any;
+    if (isLinearAcyclicGraph(edges)) {
+      nodesInOrder = getNodesInOrder(edges);
+      nodesInOrder = nodesInOrder.map((node: any) =>
+        nodes.find((n: any) => n.id == node),
+      );
+      console.log(nodesInOrder);
+    } else {
+      return;
+    }
     let ids = edges.map((edge: any) => edge.source);
     let ids2 = edges.map((edge: any) => edge.target);
     let input = [...new Set([...ids, ...ids2])];
@@ -88,19 +185,39 @@ function Page() {
     }
     console.log(nodesData);
   }
-  function runFlow() {
-    console.log("nodes", nodes);
+  function generateFlowFromEdges() {}
+  function runNodesInOrder(nodes: any) {
+    let nodeNames: any = [];
+    let nodeInputs: any = [];
+    nodes.forEach((node: any) => {
+      nodeNames.push(node.data.action);
+      let x = node.data.inputs.reduce((acc: any, { name, value }: any) => {
+        acc[name] = value;
+        return acc;
+      }, {});
+      nodeInputs.push(x);
+    });
+    console.log("running nodes in order", {
+      nodes: nodeNames,
+      input: nodeInputs,
+    });
     fetch(`${SERVER_URL}/run-flow`, {
       method: "POST",
-      body: JSON.stringify({
-        nodes: ["textSummarizer"],
-        input: [{ text: "hello world" }],
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setRuns([...runs, { id: crypto.randomUUID() }]);
-      });
+      body: JSON.stringify({ nodes: nodeNames, input: nodeInputs }),
+    });
+  }
+  function runFlow() {
+    let nodesInOrder: any;
+    if (isLinearAcyclicGraph(edges)) {
+      nodesInOrder = getNodesInOrder(edges);
+      nodesInOrder = nodesInOrder.map((node: any) =>
+        nodes.find((n: any) => n.id == node),
+      );
+      console.log("nodes in order", nodesInOrder);
+    } else {
+      return;
+    }
+    runNodesInOrder(nodesInOrder);
   }
   useEffect(() => {
     fetchActions();
