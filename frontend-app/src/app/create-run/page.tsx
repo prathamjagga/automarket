@@ -12,18 +12,20 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useMemo } from "react";
 import { SERVER_URL } from "~/env";
-import StandardNode from "./nodes/StandardNode";
 import "./nodes/standardnode.css";
+import Image from "next/image";
+import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
+import StandardNode from "./nodes/TextUpdaterNode";
 
-export default function Page() {
-  /* states for nodes and edges */
-  const nodeTypes = {
+function Page() {
+  const nodeTypes: any = {
     standardNode: (props: any) => (
-      <StandardNode {...props} nodes={nodes} setNodes={setNodes} />
+      <StandardNode {...props} setNodes={setNodes} nodes={nodes} />
     ),
   };
+  /* states for nodes and edges */
   const [nodes, setNodes] = useState<any>([]);
   useEffect(() => {
     console.log("nodes changed", nodes);
@@ -37,24 +39,32 @@ export default function Page() {
     (changes: any) => setEdges((eds: any) => applyEdgeChanges(changes, eds)),
     [],
   );
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds: any) => addEdge(params, eds)),
-    [],
-  );
+  const onConnect = useCallback((params: any) => {
+    console.log("onConnect", params);
+    return setEdges((eds: any) => addEdge(params, eds));
+  }, []);
   /* nodes and edges logic */
   async function addNode(action: any) {
     let id = crypto.randomUUID();
+    let actionInputs: any = await fetch(`${SERVER_URL}/action/${action}`);
+    actionInputs = await actionInputs.json();
     setNodes((nodes: any) => [
       ...nodes,
       {
         id,
-        data: { action },
-        position: { x: 0, y: 0 },
+        data: { action, inputs: actionInputs.inputs },
+        position: { x: 50, y: 50 },
         type: "standardNode",
       },
     ]);
   }
+  function isValidLinearGraph(edges: any) {
+    return true;
+  }
+
+  /* ui logic */
   const [actions, setActions] = useState([]);
+  const [runs, setRuns] = useState<any>([]);
   async function fetchActions() {
     const res = await fetch(`${SERVER_URL}/actions`);
     const data = await res.json();
@@ -63,9 +73,6 @@ export default function Page() {
     setActions(Array.from(uniqueActionNames));
   }
 
-  function isValidLinearGraph(edges: any) {
-    return true;
-  }
   function saveToMarket() {
     isValidLinearGraph(edges);
     let ids = edges.map((edge: any) => edge.source);
@@ -89,7 +96,11 @@ export default function Page() {
         nodes: ["textSummarizer"],
         input: [{ text: "hello world" }],
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setRuns([...runs, { id: crypto.randomUUID() }]);
+      });
   }
   useEffect(() => {
     fetchActions();
@@ -100,16 +111,47 @@ export default function Page() {
   useEffect(() => {
     console.log("nodes change", nodes);
   }, [nodes]);
+
+  /*auth and session */
+  const { data: sessionData, status } = useSession();
   return (
     <div className="flex flex-row">
       <SidebarWrapper />
-      <div>
-        <div className="w-100 text-center">Automarket</div>
+      <div className=" flex flex-col" style={{ width: "100%" }}>
+        <div className="w-100 align-items-center flex flex-row justify-center text-center">
+          <div>
+            <Image
+              className="center"
+              src="/logo.png"
+              alt="logo"
+              width={200}
+              height={200}
+            />
+          </div>
+          <div>👋 Hello {sessionData?.user?.name}</div>
+          {status === "unauthenticated" ? (
+            <div>
+              <button
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+                className="bg-blue-500 p-2 hover:bg-blue-400"
+              >
+                Sign in
+              </button>
+            </div>
+          ) : (
+            <div>
+              <button
+                onClick={() => signOut()}
+                className="bg-blue-500 p-2 hover:bg-blue-400"
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
 
-        <div className="flex flex-row">
-          <div
-            style={{ width: "900px", height: "90vh", background: "#F3F4F6" }}
-          >
+        <div className="canvas-and-runs w-100 flex flex-row">
+          <div style={{ width: "70%", height: "80vh", background: "#F3F4F6" }}>
             <ReactFlow
               nodes={nodes}
               onNodesChange={onNodesChange}
@@ -136,12 +178,12 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <div className="ml-5 w-80">
+          <div style={{ width: "30%" }}>
             <div className="actions-container">
               <h1 className="w-100 mb-3 bg-gray-500">Add More Actions</h1>
               <div
                 className="actions"
-                style={{ height: "370px", overflow: "scroll" }}
+                style={{ height: "370px", overflowY: "scroll" }}
               >
                 {actions.map((action: any) => {
                   return (
@@ -159,11 +201,16 @@ export default function Page() {
                 })}
               </div>
             </div>
-            <div className="workflow-runs">
-              <h1 className="w-100 mb-10 bg-gray-500">Workflow Runs</h1>
-              <div className="recent-run bg-gray-200">
-                <p>Run ID: 1</p>
-                <p>Status: Success</p>
+            <div>
+              <h1 className=" mt-4 bg-gray-500">Workflow Runs</h1>
+              <div className=" h-48 overflow-y-scroll">
+                {runs &&
+                  runs.map((run: any) => (
+                    <div className="pt-2 text-sm">
+                      ID: {run.id} <br />
+                      Status: Success
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -172,3 +219,11 @@ export default function Page() {
     </div>
   );
 }
+
+export default () => {
+  return (
+    <SessionProvider>
+      <Page />
+    </SessionProvider>
+  );
+};
