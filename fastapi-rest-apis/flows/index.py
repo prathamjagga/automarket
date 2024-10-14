@@ -2,12 +2,16 @@ from db.index import runSQL
 from flows.sequentialFlow import run_sequence
 
 import json
+import uuid
 
-def runFlow(nodes, inputs):
-    print(input)
+def runFlow(nodes, inputs, workflow_id):
+    print(inputs)
     # exit()
     try:
         OP = run_sequence(nodes, inputs)
+        # TODO: let us register the workflow run
+        run_id = uuid.uuid4()
+        runSQL(f"insert into runs (id, workflow_id, status, extras) values ('{run_id}', '{workflow_id}', 'successfully-completed', 'NONE')")
         return OP
     except Exception as e:
         print("ERROR", e)

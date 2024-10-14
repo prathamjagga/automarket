@@ -36,7 +36,7 @@ function TextUpdaterNode(props: any) {
         {props.data.action}{" "}
         {props.data.inputs.map((input: any) => (
           <div>
-            <label>{input.name}</label>{" "}
+            <label style={{ color: "black" }}>{input.name}</label>{" "}
             <input
               key={input.name}
               type={input.type}

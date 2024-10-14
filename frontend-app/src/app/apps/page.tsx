@@ -18,8 +18,63 @@ import "./nodes/standardnode.css";
 import Image from "next/image";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import StandardNode from "./nodes/TextUpdaterNode";
+import { useSearchParams } from "next/navigation";
 
 function Page() {
+  /* initialise the UI bitch */
+
+  const params = useSearchParams();
+
+  useEffect(() => {
+    fetchActions();
+    if (params.get("id")) {
+      fetchFlowAndSetNodesAndEdges(params.get("id"));
+    }
+  }, []);
+
+  async function fetchFlowAndSetNodesAndEdges(id: any) {
+    let flow: any = await fetch(`${SERVER_URL}/flow?id=${id}`);
+    flow = await flow.json();
+    // now we have to make changes to the given flow to get it in the required format
+    flow = JSON.parse(flow.flow_string);
+
+    // generate nodes
+    let generatedNodes: any = [];
+    let y = -17;
+    for (let i = 0; i < flow.nodes.length; i++) {
+      let obj: any = {};
+      obj.id = crypto.randomUUID();
+      obj.position = { x: 360, y };
+      y += 110;
+      obj.type = "standardNode";
+      obj.data = {};
+      obj.data.action = flow.nodes[i];
+      obj.data.inputs = [];
+      for (let key in flow.inputs[i]) {
+        let x: any = {};
+        x.name = key;
+        x.value = flow.inputs[i][key];
+        x.type = "text"; // TODO: change this type dynamically
+        obj.data.inputs.push(x);
+      }
+      generatedNodes.push(obj);
+    }
+    console.log("generatedNodes", generatedNodes);
+    setNodes(generatedNodes);
+
+    // generate edges now
+    debugger;
+    if (generatedNodes.length < 2) return;
+    let prevId = generatedNodes[0].id;
+    for (let i = 1; i < generatedNodes.length; i++) {
+      let edge: any = { sourceHandle: null, targetHandle: null };
+      edge.source = prevId;
+      edge.target = generatedNodes[i].id;
+      prevId = generatedNodes[i].id;
+      onConnect(edge);
+    }
+  }
+
   const nodeTypes: any = {
     standardNode: (props: any) => (
       <StandardNode {...props} setNodes={setNodes} nodes={nodes} />
@@ -187,6 +242,10 @@ function Page() {
   }
   function generateFlowFromEdges() {}
   function runNodesInOrder(nodes: any) {
+    if (!params.get("id")) {
+      alert("please save the app first");
+      return;
+    }
     let nodeNames: any = [];
     let nodeInputs: any = [];
     nodes.forEach((node: any) => {
@@ -203,11 +262,23 @@ function Page() {
     });
     fetch(`${SERVER_URL}/run-flow`, {
       method: "POST",
-      body: JSON.stringify({ nodes: nodeNames, input: nodeInputs }),
-    });
+      body: JSON.stringify({
+        nodes: nodeNames,
+        input: nodeInputs,
+        workflow_id: params.get("id"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        refreshRuns();
+      });
   }
   function runFlow() {
     let nodesInOrder: any;
+    if (nodes.length == 1) {
+      runNodesInOrder(nodes);
+      return;
+    }
     if (isLinearAcyclicGraph(edges)) {
       nodesInOrder = getNodesInOrder(edges);
       nodesInOrder = nodesInOrder.map((node: any) =>
@@ -219,11 +290,9 @@ function Page() {
     }
     runNodesInOrder(nodesInOrder);
   }
+  function refreshRuns() {}
   useEffect(() => {
-    fetchActions();
-  }, []);
-  useEffect(() => {
-    console.log("edges change");
+    console.log("edges change", edges);
   }, [edges]);
   useEffect(() => {
     console.log("nodes change", nodes);

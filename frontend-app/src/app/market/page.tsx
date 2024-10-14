@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import SidebarWrapper from "../_components/sidebar";
 import OutputModal from "../_components/output-component";
 import { SERVER_URL } from "~/env";
+import { useRouter } from "next/navigation";
 
 function Market() {
+  const router = useRouter();
   const [show, setShow] = useState(false);
   // const [nodeNumber, setNodeNumber] = useState(0);
   const [outputText, setOutputText] = useState("");
@@ -87,6 +89,14 @@ function Market() {
                 className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
               >
                 Run App
+              </button>
+              <button
+                className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                onClick={() => {
+                  router.push(`/apps?id=${app.id}`);
+                }}
+              >
+                Edit App
               </button>
             </div>
           ))}

@@ -85,7 +85,7 @@ async def run_flow(request: Request):
     request = await request.json()
     print("REQ", request)
     flow_input = request
-    OP =  runFlow(flow_input['nodes'], flow_input['input'])
+    OP =  runFlow(flow_input['nodes'], flow_input['input'], flow_input['workflow_id'])
     # print("OP", OP)
     return json.loads(OP)
 
@@ -141,4 +141,20 @@ async def getConnections():
     json_res = []
     for val in result:
         json_res.append({"platform":val[0], "token": val[1], "username":val[2], "password":val[3]})
+    return json_res
+
+@app.get("/flow")
+async def appGetFlow(request: Request):
+    flow_id = request.query_params.get('id')
+    result = runSQL(f"select * from flow_as_str where id='{flow_id}'")
+    result = result.fetchall()
+    return {"app_name":result[0][2], "flow_string":result[0][0], "id":result[0][1]}
+
+@app.get("/runs")
+async def appGetRuns():
+    result = runSQL("select * from runs")
+    result = result.fetchall()
+    json_res = {}
+    for val in result:
+        json_res.append({"id":val[0], "workflow_id":val[1], "status":val[2], "extras":val[3]})
     return json_res
