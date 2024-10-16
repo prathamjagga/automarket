@@ -301,25 +301,26 @@ function Page() {
   /*auth and session */
   const { data: sessionData, status } = useSession();
   return (
-    <div className="flex flex-row">
-      <SidebarWrapper />
-      <div className=" flex flex-col" style={{ width: "100%" }}>
-        <div className="w-100 align-items-center flex flex-row justify-center text-center">
-          <div>
-            <Image
-              className="center"
-              src="/logo.png"
-              alt="logo"
-              width={200}
-              height={200}
-            />
+    <div>
+      <div className="w-100 flex items-center justify-between shadow-md">
+        <div>
+          <Image
+            className="center pl-3"
+            src="/logo.png"
+            alt="logo"
+            width={180}
+            height={100}
+          />
+        </div>
+        <div className="flex items-center gap-3 pr-3">
+          <div className="p-2 font-semibold">
+            👋 Hello! {sessionData?.user?.name}
           </div>
-          <div>👋 Hello {sessionData?.user?.name}</div>
           {status === "unauthenticated" ? (
             <div>
               <button
                 onClick={() => signIn("google", { callbackUrl: "/" })}
-                className="bg-blue-500 p-2 hover:bg-blue-400"
+                className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"
               >
                 Sign in
               </button>
@@ -328,75 +329,88 @@ function Page() {
             <div>
               <button
                 onClick={() => signOut()}
-                className="bg-blue-500 p-2 hover:bg-blue-400"
+                className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"
               >
                 Sign out
               </button>
             </div>
           )}
         </div>
+      </div>
 
-        <div className="canvas-and-runs w-100 flex flex-row">
-          <div style={{ width: "70%", height: "80vh", background: "#F3F4F6" }}>
-            <ReactFlow
-              nodes={nodes}
-              onNodesChange={onNodesChange}
-              edges={edges}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              nodeTypes={nodeTypes}
+      <div className="flex gap-4 pt-5">
+        <div className="pl-3"><SidebarWrapper /></div>
+        <div className=" flex flex-col" style={{ width: "100%" }}>
+          <div className="canvas-and-runs w-100 flex gap-5 pr-3">
+            <div
+              style={{
+                width: "75%",
+                height: "84vh",
+                background: "#F3F4F6",
+                borderRadius: "10px",
+              }}
             >
-              <Background />
-              <Controls />
-            </ReactFlow>
-            <div className="action-buttons m-5 flex flex-row">
-              <button
-                className="mr-5 bg-blue-500 p-2 hover:bg-blue-400"
-                onClick={() => saveToMarket()}
+              <ReactFlow
+                nodes={nodes}
+                onNodesChange={onNodesChange}
+                edges={edges}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                nodeTypes={nodeTypes}
               >
-                Save to Market
-              </button>
-              <button
-                className="bg-blue-500 p-2 hover:bg-blue-400"
-                onClick={runFlow}
-              >
-                Run Flow
-              </button>
-            </div>
-          </div>
-          <div style={{ width: "30%" }}>
-            <div className="actions-container">
-              <h1 className="w-100 mb-3 bg-gray-500">Add More Actions</h1>
-              <div
-                className="actions"
-                style={{ height: "370px", overflowY: "scroll" }}
-              >
-                {actions.map((action: any) => {
-                  return (
-                    <>
-                      {" "}
-                      <button
-                        className="action mb-2 bg-blue-300 hover:bg-blue-400"
-                        onClick={() => addNode(action)}
-                      >
-                        <p>{action}</p>
-                      </button>
-                      <br></br>
-                    </>
-                  );
-                })}
+                <Background />
+                <Controls />
+              </ReactFlow>
+              <div className="action-buttons flex flex-row gap-5 p-5">
+                <button
+                  className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"
+                  onClick={() => saveToMarket()}
+                >
+                  Save to Market
+                </button>
+                <button
+                  className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"
+                  onClick={runFlow}
+                >
+                  Run Flow
+                </button>
               </div>
             </div>
-            <div>
-              <h1 className=" mt-4 bg-gray-500">Workflow Runs</h1>
-              <div className=" h-48 overflow-y-scroll">
-                {runs &&
-                  runs.map((run: any) => (
-                    <div className="pt-2 text-sm">
-                      ID: {run.id} <br />
-                      Status: Success
-                    </div>
-                  ))}
+            
+            <div style={{ width: "25%" }}>
+              <div className="actions-container shadow-md rounded-lg">
+                <h1 className="rounded-t-lg w-100 p-2 bg-gray-500 text-white">Add More Actions</h1>
+                <div
+                  className="actions pl-2"
+                  style={{ height: "400px", overflowY: "scroll" }}
+                >
+                  {actions.map((action: any) => {
+                    return (
+                      <>
+                        {" "}
+                        <button
+                          className="action w-[98%] mb-1 p-2 hover:text-[#5072A7] text-left"
+                          onClick={() => addNode(action)}
+                        >
+                          <p className="transition-transform duration-300 ease-in-out hover:translate-x-3">{action}</p>
+                        </button>
+                        <div className="border-b-2"></div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+              <div>
+                <h1 className=" mt-4 bg-gray-500">Workflow Runs</h1>
+                <div className=" h-48 overflow-y-scroll">
+                  {runs &&
+                    runs.map((run: any) => (
+                      <div className="pt-2 text-sm">
+                        ID: {run.id} <br />
+                        Status: Success
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

@@ -32,12 +32,14 @@ function StandardNode(props: any) {
         position={Position.Top}
         isConnectable={isConnectable}
       />
-      <div className="flex flex-col bg-gray-500">
-        {props.data.action}{" "}
+      <div className="flex flex-col bg-gray-200 border p-2 shadow-lg rounded-lg" style={{ borderColor: "#6b7280"}}>
+        <p className="font-bold ">{props.data.action}{" "}</p>
+        <div className="shadow-md mt-1 h-1 border-t border-black w-full bg-gray-300 "></div>
         {props.data.inputs.map((input: any) => (
-          <div>
-            <label style={{ color: "black" }}>{input.name}</label>{" "}
+          <div className="pt-2">
+            <p className="font-semibold text-md pb-1">{input.name}</p>{" "}
             <input
+              className="border rounded-lg h-8 bg-gray-200"
               key={input.name}
               type={input.type}
               value={input.value}
