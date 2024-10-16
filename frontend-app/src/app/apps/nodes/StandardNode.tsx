@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { Handle, Position } from "@xyflow/react";
 
-function TextUpdaterNode(props: any) {
+function StandardNode(props: any) {
   const isConnectable = props.isConnectable;
   useEffect(() => {
     console.log("PROPS", props);
@@ -59,4 +59,4 @@ function TextUpdaterNode(props: any) {
   );
 }
 
-export default TextUpdaterNode;
+export default StandardNode;

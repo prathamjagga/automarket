@@ -17,7 +17,7 @@ import { SERVER_URL } from "~/env";
 import "./nodes/standardnode.css";
 import Image from "next/image";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
-import StandardNode from "./nodes/TextUpdaterNode";
+import StandardNode from "./nodes/StandardNode";
 import { useSearchParams } from "next/navigation";
 
 function Page() {
