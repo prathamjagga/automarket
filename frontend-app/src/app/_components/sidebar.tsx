@@ -10,11 +10,18 @@ import Link from "next/link";
 function SidebarWrapper() {
   return (
     <div className="w-fit px-2 ">
-      <Sidebar style={{ height: "92vh", boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)"  }} aria-label="Default sidebar example" className="rounded-lg shadow-md">
-        <Sidebar.Items style={{ borderRadius: "10px"}}>
+      <Sidebar
+        style={{ height: "92vh", boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)" }}
+        aria-label="Default sidebar example"
+        className="rounded-lg shadow-md"
+      >
+        <Sidebar.Items style={{ borderRadius: "10px" }}>
           <Sidebar.ItemGroup>
-            <Link href="create-run">
-              <Sidebar.Item icon={MdOutlineDeveloperMode} className="hover:text-[#5072A7] hover:shadow-lg">
+            <Link href="apps">
+              <Sidebar.Item
+                icon={MdOutlineDeveloperMode}
+                className="hover:text-[#5072A7] hover:shadow-lg"
+              >
                 <div className="flex transform-gpu flex-row items-center justify-between transition-transform duration-300 ease-in-out hover:translate-x-3">
                   <p>App Builder</p>
                   {/* <p>👷‍♂️</p> */}
@@ -22,7 +29,10 @@ function SidebarWrapper() {
               </Sidebar.Item>
             </Link>
             <Link href="market">
-              <Sidebar.Item icon={FaShoppingBag} className="hover:text-[#5072A7] hover:shadow-lg">
+              <Sidebar.Item
+                icon={FaShoppingBag}
+                className="hover:text-[#5072A7] hover:shadow-lg"
+              >
                 <div className="flex transform-gpu flex-row items-center justify-between transition-transform duration-300 ease-in-out hover:translate-x-3">
                   <p>AutoMarket</p>
                   {/* <p>👜</p> */}
@@ -30,7 +40,10 @@ function SidebarWrapper() {
               </Sidebar.Item>{" "}
             </Link>
             <Link href="connections">
-              <Sidebar.Item icon={PiPlugsConnectedFill} className="hover:text-[#5072A7] hover:shadow-lg">
+              <Sidebar.Item
+                icon={PiPlugsConnectedFill}
+                className="hover:text-[#5072A7] hover:shadow-lg"
+              >
                 <div className="flex transform-gpu flex-row items-center justify-between transition-transform duration-300 ease-in-out hover:translate-x-3">
                   <p>Connections</p>
                   {/* <p>🔌</p> */}
