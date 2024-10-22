@@ -1,19 +1,13 @@
 import subprocess
 import json
 import sys
-from openai import OpenAI
+import google.generativeai as genai
 
 def get_output(json_args):
   try:
-      client = OpenAI(api_key=json_args["token"])
-      completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-          {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-          {"role": "user", "content": json_args['prompt']}
-        ]
-      )
-      return(json.dumps({"output": {"type":"json", "content":{"text":completion.choices[0].message.content}}}))
+      genai.configure(api_key="AIzaSyCBajXtMaSAm-cOWlS78pqOyOJ9t41S5hY")
+      model = genai.GenerativeModel("gemini-1.5-flash")
+      response = model.generate_content(json_args["prompt"])
+      return(json.dumps({"output": {"type":"json", "content":{"text":response.text}}}))
   except Exception as e:
       return(json.dumps({"output": {"type": "error", "content": e}}))
-
