@@ -3,6 +3,7 @@ import React from "react";
 import { Sidebar } from "flowbite-react";
 import { HiChartPie, HiViewBoards } from "react-icons/hi";
 import { MdOutlineDeveloperMode } from "react-icons/md";
+import { GiRobotHelmet } from "react-icons/gi";
 import { FaShoppingBag } from "react-icons/fa";
 import { PiPlugsConnectedFill } from "react-icons/pi";
 import Link from "next/link";
@@ -50,7 +51,17 @@ function SidebarWrapper() {
                 </div>
               </Sidebar.Item>{" "}
             </Link>
-
+            <Link href="connections">
+              <Sidebar.Item
+                icon={GiRobotHelmet}
+                className="hover:text-[#5072A7] hover:shadow-lg"
+              >
+                <div className="flex transform-gpu flex-row items-center justify-between transition-transform duration-300 ease-in-out hover:translate-x-3">
+                  <p>Generate with AI</p>
+                  {/* <p>🔌</p> */}
+                </div>
+              </Sidebar.Item>{" "}
+            </Link>
             {/* <Sidebar.Item
             href="/run-apps"
             icon={HiViewBoards}
