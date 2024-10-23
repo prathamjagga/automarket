@@ -12,6 +12,7 @@ import db.index as DB
 from db.index import session, runSQL
 from actions.index import addAction, getAllActions, getAction, getActionOutputs
 from flows.index import addFlowToDB, runFlow, saveFlowStr, getStrFlows
+from cron_run import wf_tree_runner_on_interval
 
 from models import ActionsContent, FlowsContent, RunFlowInput
 
@@ -158,3 +159,14 @@ async def appGetRuns():
     for val in result:
         json_res.append({"id":val[0], "workflow_id":val[1], "status":val[2], "extras":val[3]})
     return json_res
+
+
+@app.post("/add-cron-run")
+async def schedule(request: Request):
+    try:
+        request = await request.json()
+        wf_tree_runner_on_interval.delay(request['interval'], request['nodes'], request['inputs'], request['endTime'])
+        return True
+    except Exception as e:
+        # print(e)
+        return False

@@ -290,6 +290,27 @@ function Page() {
     }
     runNodesInOrder(nodesInOrder);
   }
+  function scheduleWf() {
+    let nodeNames: any = [];
+    let nodeInputs: any = [];
+    nodes.forEach((node: any) => {
+      nodeNames.push(node.data.action);
+      let x = node.data.inputs.reduce((acc: any, { name, value }: any) => {
+        acc[name] = value;
+        return acc;
+      }, {});
+      nodeInputs.push(x);
+    });
+    fetch(`${SERVER_URL}/add-cron-run`, {
+      method: "POST",
+      body: JSON.stringify({
+        interval: 10,
+        endTime: Date.now() + 24 * 60 * 60 * 1000,
+        inputs: nodeInputs,
+        nodes: nodeNames,
+      }),
+    });
+  }
   function refreshRuns() {}
   useEffect(() => {
     console.log("edges change", edges);
@@ -339,7 +360,9 @@ function Page() {
       </div>
 
       <div className="flex gap-4 pt-5">
-        <div className="pl-3"><SidebarWrapper /></div>
+        <div className="pl-3">
+          <SidebarWrapper />
+        </div>
         <div className=" flex flex-col" style={{ width: "100%" }}>
           <div className="canvas-and-runs w-100 flex gap-5 pr-3">
             <div
@@ -374,12 +397,20 @@ function Page() {
                 >
                   Run Flow
                 </button>
+                <button
+                  className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"
+                  onClick={scheduleWf}
+                >
+                  Schedule
+                </button>
               </div>
             </div>
-            
+
             <div style={{ width: "25%" }}>
-              <div className="actions-container shadow-md rounded-lg">
-                <h1 className="rounded-t-lg w-100 p-2 bg-gray-500 text-white">Add More Actions</h1>
+              <div className="actions-container rounded-lg shadow-md">
+                <h1 className="w-100 rounded-t-lg bg-gray-500 p-2 text-white">
+                  Add More Actions
+                </h1>
                 <div
                   className="actions pl-2"
                   style={{ height: "400px", overflowY: "scroll" }}
@@ -389,10 +420,12 @@ function Page() {
                       <>
                         {" "}
                         <button
-                          className="action w-[98%] mb-1 p-2 hover:text-[#5072A7] text-left"
+                          className="action mb-1 w-[98%] p-2 text-left hover:text-[#5072A7]"
                           onClick={() => addNode(action)}
                         >
-                          <p className="transition-transform duration-300 ease-in-out hover:translate-x-3">{action}</p>
+                          <p className="transition-transform duration-300 ease-in-out hover:translate-x-3">
+                            {action}
+                          </p>
                         </button>
                         <div className="border-b-2"></div>
                       </>
