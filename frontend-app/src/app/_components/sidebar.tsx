@@ -51,7 +51,7 @@ function SidebarWrapper() {
                 </div>
               </Sidebar.Item>{" "}
             </Link>
-            <Link href="connections">
+            <Link href="ai-workflows">
               <Sidebar.Item
                 icon={GiRobotHelmet}
                 className="hover:text-[#5072A7] hover:shadow-lg"

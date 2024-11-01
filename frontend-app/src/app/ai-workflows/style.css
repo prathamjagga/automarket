@@ -1,0 +1,9 @@
+.dotted-bg {
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  background-image: radial-gradient(
+    circle,
+    white 1px,
+    transparent 1px
+  ); /* Dotted effect */
+  background-size: 60px 60px; /* Adjust the size of dots */
+}

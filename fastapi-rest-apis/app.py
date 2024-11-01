@@ -170,3 +170,8 @@ async def schedule(request: Request):
     except Exception as e:
         # print(e)
         return False
+    
+
+@app.post("/ai-generate")
+async def appAIGenerate(request: Request):
+    return True
