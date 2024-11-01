@@ -19,6 +19,7 @@ import Image from "next/image";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import StandardNode from "./nodes/StandardNode";
 import { useSearchParams } from "next/navigation";
+import WorkflowResultPopup from "./result";
 
 function Page() {
   /* initialise the UI bitch */
@@ -117,6 +118,9 @@ function Page() {
   /* ui logic */
   const [actions, setActions] = useState([]);
   const [runs, setRuns] = useState<any>([]);
+  const [workflowResult, setWorkflowResult] = useState<any>("");
+  const [workflowRunning, setWorkflowRunning] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   async function fetchActions() {
     const res = await fetch(`${SERVER_URL}/actions`);
     const data = await res.json();
@@ -242,8 +246,11 @@ function Page() {
   }
   function generateFlowFromEdges() {}
   function runNodesInOrder(nodes: any) {
+    setShowResult(true);
+    setWorkflowRunning(true);
     if (!params.get("id")) {
       alert("please save the app first");
+      setWorkflowRunning(false);
       return;
     }
     let nodeNames: any = [];
@@ -270,6 +277,8 @@ function Page() {
     })
       .then((res) => res.json())
       .then((res) => {
+        setWorkflowRunning(false);
+        setWorkflowResult(JSON.stringify(res));
         refreshRuns();
       });
   }
@@ -321,8 +330,18 @@ function Page() {
 
   /*auth and session */
   const { data: sessionData, status } = useSession();
+  useEffect(() => {
+    console.log("show result change", showResult);
+  }, [showResult]);
   return (
     <div>
+      {showResult == true && (
+        <WorkflowResultPopup
+          setShow={setShowResult}
+          result={workflowResult}
+          loading={workflowRunning}
+        />
+      )}
       <div className="w-100 flex items-center justify-between shadow-md">
         <div>
           <Image
@@ -373,17 +392,19 @@ function Page() {
                 borderRadius: "10px",
               }}
             >
-              <ReactFlow
-                nodes={nodes}
-                onNodesChange={onNodesChange}
-                edges={edges}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                nodeTypes={nodeTypes}
-              >
-                <Background />
-                <Controls />
-              </ReactFlow>
+              {!showResult && (
+                <ReactFlow
+                  nodes={nodes}
+                  onNodesChange={onNodesChange}
+                  edges={edges}
+                  onEdgesChange={onEdgesChange}
+                  onConnect={onConnect}
+                  nodeTypes={nodeTypes}
+                >
+                  <Background />
+                  <Controls />
+                </ReactFlow>
+              )}
               <div className="action-buttons flex flex-row gap-5 p-5">
                 <button
                   className="rounded bg-[#5072A7] px-[6px] py-[2px] text-white hover:bg-[#6699CC]"

@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import { Suspense } from "react";
 
 // import { TRPCReactProvider } from "~/trpc/react";
 
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <>{children}</>
+        <Suspense>
+          <>{children}</>
+        </Suspense>
       </body>
     </html>
   );
