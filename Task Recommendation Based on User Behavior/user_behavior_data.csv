@@ -1,0 +1,11 @@
+user_id,task_id,task_description,frequency,user_feedback
+1,101,Automate email responses,10,5
+1,102,Schedule social media posts,5,4
+2,101,Automate email responses,7,4
+2,103,Generate weekly reports,3,3
+3,102,Schedule social media posts,8,5
+3,104,Data backup automation,2,3
+3,105,File organization automation,4,4
+4,103,Generate weekly reports,5,4
+4,106,Customer feedback analysis,6,5
+5,107,Inventory management automation,7,4
